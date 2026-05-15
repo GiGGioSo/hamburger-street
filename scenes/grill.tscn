@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bro1pmia6ydqx"]
+
+[ext_resource type="Texture2D" uid="uid://b1plp4uixok4x" path="res://textures/cooking/grill.png" id="1_70781"]
+[ext_resource type="PackedScene" uid="uid://cgys8cxslc1sk" path="res://scenes/hamburger.tscn" id="1_b7lk3"]
+
+[node name="Grill" type="Node2D" unique_id=404518404]
+
+[node name="GrillImage" type="Sprite2D" parent="." unique_id=396813333]
+position = Vector2(581, 319)
+scale = Vector2(1.0450752, 1.0239362)
+texture = ExtResource("1_70781")
+
+[node name="Hamburger" parent="." unique_id=1928382194 instance=ExtResource("1_b7lk3")]
+position = Vector2(444, 114)
+scale = Vector2(1, 1.67)
