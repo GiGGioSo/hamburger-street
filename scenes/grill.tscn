@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bro1pmia6ydqx"]
 
-[ext_resource type="Texture2D" uid="uid://b1plp4uixok4x" path="res://textures/cooking/grill.png" id="1_70781"]
+[ext_resource type="Texture2D" uid="uid://bc0732o7mwblm" path="res://textures/cooking/cooking_scene_grill.png" id="1_70781"]
 [ext_resource type="PackedScene" uid="uid://dhqovbpq7keta" path="res://scenes/hamburger_grill_slot.tscn" id="3_fdqnf"]
 
 [node name="Grill" type="Node2D" unique_id=404518404]
@@ -11,19 +11,19 @@ texture = ExtResource("1_70781")
 [node name="HamburgerGrillSlots" type="Node2D" parent="." unique_id=691893124]
 
 [node name="HamburgerGrillSlot1" parent="HamburgerGrillSlots" unique_id=1563292212 instance=ExtResource("3_fdqnf")]
-position = Vector2(-350, -150)
+position = Vector2(-450, -150)
 
 [node name="HamburgerGrillSlot2" parent="HamburgerGrillSlots" unique_id=836752166 instance=ExtResource("3_fdqnf")]
 position = Vector2(0, -150)
 
 [node name="HamburgerGrillSlot3" parent="HamburgerGrillSlots" unique_id=977526263 instance=ExtResource("3_fdqnf")]
-position = Vector2(350, -150)
+position = Vector2(450, -150)
 
 [node name="HamburgerGrillSlot4" parent="HamburgerGrillSlots" unique_id=823131506 instance=ExtResource("3_fdqnf")]
-position = Vector2(-350, 150)
+position = Vector2(-450, 150)
 
 [node name="HamburgerGrillSlot5" parent="HamburgerGrillSlots" unique_id=109056411 instance=ExtResource("3_fdqnf")]
 position = Vector2(0, 150)
 
 [node name="HamburgerGrillSlot6" parent="HamburgerGrillSlots" unique_id=1377432738 instance=ExtResource("3_fdqnf")]
-position = Vector2(350, 150)
+position = Vector2(450, 150)

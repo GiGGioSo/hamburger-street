@@ -6,17 +6,17 @@
 [node name="Cooking" type="Node2D" unique_id=457705942]
 
 [node name="Grill" parent="." unique_id=404518404 instance=ExtResource("1_kcvj3")]
-position = Vector2(569, 200.00002)
-scale = Vector2(0.51, 0.51)
+position = Vector2(573, 156)
+scale = Vector2(0.41, 0.41)
 
 [node name="LettuceDressing" parent="." unique_id=921694542 instance=ExtResource("2_4yrxt")]
-position = Vector2(636, 434)
+position = Vector2(584, 391)
 
 [node name="TomatoDressing" parent="." unique_id=1909185182 instance=ExtResource("2_4yrxt")]
-position = Vector2(341, 438)
+position = Vector2(289, 395)
 
 [node name="OnionDressing" parent="." unique_id=24208898 instance=ExtResource("2_4yrxt")]
-position = Vector2(489, 435)
+position = Vector2(437, 392)
 
 [node name="CheddarDressing" parent="." unique_id=53107446 instance=ExtResource("2_4yrxt")]
-position = Vector2(781, 435)
+position = Vector2(729, 392)

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b1bmnve3ogc6a"]
+
+[ext_resource type="Texture2D" uid="uid://btipkgga8018d" path="res://textures/cooking/hamburger_cheese.png" id="1_6ih6m"]
+
+[node name="Cheese" type="Node2D" unique_id=347097755]
+
+[node name="CheeseImage" type="Sprite2D" parent="." unique_id=706465700]
+texture = ExtResource("1_6ih6m")

@@ -2,9 +2,18 @@
 
 [ext_resource type="PackedScene" uid="uid://ipe7wphk70fd" path="res://scenes/cooking.tscn" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://gj5hdlab16ot" path="res://scenes/customers.tscn" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://buf0nvbjb70e" path="res://scenes/red_light.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://p33s30bwjyr1" path="res://scenes/green_light.tscn" id="4_lbhrr"]
 
 [node name="Game" type="Node2D" unique_id=126312487]
 
 [node name="Cooking" parent="." unique_id=457705942 instance=ExtResource("1_uwrxv")]
 
 [node name="Customers" parent="." unique_id=353441749 instance=ExtResource("2_yqjtg")]
+
+[node name="RedLight" parent="." unique_id=800926196 instance=ExtResource("3_lnu2h")]
+position = Vector2(1052, 116)
+scale = Vector2(0.49, 0.49)
+
+[node name="Green Light" parent="." unique_id=472599219 instance=ExtResource("4_lbhrr")]
+position = Vector2(1026, 402)

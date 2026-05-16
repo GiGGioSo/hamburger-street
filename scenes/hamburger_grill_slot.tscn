@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://dhqovbpq7keta"]
 
-[ext_resource type="Texture2D" uid="uid://pch3088c11o0" path="res://icon.svg" id="1_fw2ci"]
+[ext_resource type="Texture2D" uid="uid://c26l4rraf0v70" path="res://textures/cooking/hamburger_grill_slot.png" id="1_fw2ci"]
+[ext_resource type="Script" uid="uid://cpmhqh7vulfj3" path="res://scripts/hamburger_grill_slot.gd" id="1_udsns"]
 
 [node name="HamburgerGrillSlot" type="Node2D" unique_id=1563292212]
+script = ExtResource("1_udsns")
 
 [node name="HamburgerGrillSlotImage" type="Sprite2D" parent="." unique_id=797211185]
-scale = Vector2(1.67, 1)
 texture = ExtResource("1_fw2ci")

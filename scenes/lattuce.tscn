@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d1yr0ebk48l0i"]
+
+[ext_resource type="Texture2D" uid="uid://co2c38cd6e6ac" path="res://textures/cooking/hamburger_lattuce.png" id="1_vbp7j"]
+
+[node name="Lattuce" type="Node2D" unique_id=490891247]
+
+[node name="LattuceImage" type="Sprite2D" parent="." unique_id=1040797247]
+texture = ExtResource("1_vbp7j")

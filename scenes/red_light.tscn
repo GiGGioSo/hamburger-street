@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://buf0nvbjb70e"]
+
+[ext_resource type="Texture2D" uid="uid://crn60vjb2vekm" path="res://textures/red_light.png" id="1_24oxn"]
+
+[node name="RedLight" type="Node2D" unique_id=800926196]
+
+[node name="RedLightImage" type="Sprite2D" parent="." unique_id=532897866]
+texture = ExtResource("1_24oxn")

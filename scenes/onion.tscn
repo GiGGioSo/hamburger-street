@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://prpuxxs33wwy"]
+
+[ext_resource type="Texture2D" uid="uid://bn3j0gjy5u1yf" path="res://textures/cooking/hamburger_onions.png" id="1_b3a42"]
+
+[node name="Onion" type="Node2D" unique_id=520248794]
+
+[node name="OnionImage" type="Sprite2D" parent="." unique_id=960655588]
+texture = ExtResource("1_b3a42")

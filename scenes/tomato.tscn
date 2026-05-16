@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d2ivf0ln4eixb"]
+
+[ext_resource type="Texture2D" uid="uid://bfrexcwm478yd" path="res://textures/cooking/hamburger_tomato.png" id="1_tsxsy"]
+
+[node name="Tomato" type="Node2D" unique_id=1520563275]
+
+[node name="TomatoImage" type="Sprite2D" parent="." unique_id=239010941]
+texture = ExtResource("1_tsxsy")
