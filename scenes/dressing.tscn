@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ctdaw7k24adwd"]
+
+[ext_resource type="Texture2D" uid="uid://pch3088c11o0" path="res://icon.svg" id="1_tadyn"]
+
+[node name="Dressing" type="Node2D" unique_id=921694542]
+
+[node name="DressingImage" type="Sprite2D" parent="." unique_id=964142646]
+scale = Vector2(1, 0.53)
+skew = 0.17453292
+texture = ExtResource("1_tadyn")

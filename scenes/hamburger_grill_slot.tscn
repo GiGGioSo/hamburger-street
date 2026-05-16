@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dhqovbpq7keta"]
+
+[ext_resource type="Texture2D" uid="uid://pch3088c11o0" path="res://icon.svg" id="1_fw2ci"]
+
+[node name="HamburgerGrillSlot" type="Node2D" unique_id=1563292212]
+
+[node name="HamburgerGrillSlotImage" type="Sprite2D" parent="." unique_id=797211185]
+scale = Vector2(1.67, 1)
+texture = ExtResource("1_fw2ci")

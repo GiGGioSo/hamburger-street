@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dpyx3q887vwwv"]
+
+[ext_resource type="PackedScene" uid="uid://ipe7wphk70fd" path="res://scenes/cooking.tscn" id="1_uwrxv"]
+[ext_resource type="PackedScene" uid="uid://gj5hdlab16ot" path="res://scenes/customers.tscn" id="2_yqjtg"]
+
+[node name="Game" type="Node2D" unique_id=126312487]
+
+[node name="Cooking" parent="." unique_id=457705942 instance=ExtResource("1_uwrxv")]
+
+[node name="Customers" parent="." unique_id=353441749 instance=ExtResource("2_yqjtg")]
