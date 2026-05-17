@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://bfpohsemvsceh"]
+
+[ext_resource type="Script" uid="uid://4dawpg1la2h2" path="res://scenes/game_over.gd" id="1_racf3"]
+[ext_resource type="Texture2D" uid="uid://c78j0b3h7oclv" path="res://textures/gameOver/GameOver.png" id="2_7m3ot"]
+[ext_resource type="FontFile" uid="uid://ckida6khky0h5" path="res://textures/assets/PoorRichardOpti.otf" id="3_v3hpu"]
+[ext_resource type="Texture2D" uid="uid://ydy2owuss4hy" path="res://textures/assets/button.png" id="4_irg28"]
+[ext_resource type="Script" uid="uid://12dsy6ykrfmx" path="res://scenes/play_again_button.gd" id="5_7m3ot"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2jtsn"]
+texture = ExtResource("2_7m3ot")
+modulate_color = Color(0.8741615, 0.8741615, 0.8741615, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8bugq"]
+texture = ExtResource("4_irg28")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wawo4"]
+load_path = "res://.godot/imported/button.png-e4854ecd3deb8db3a920fd46c3f7ca45.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_56v3a"]
+texture = SubResource("CompressedTexture2D_wawo4")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_o57t2"]
+load_path = "res://.godot/imported/button.png-e4854ecd3deb8db3a920fd46c3f7ca45.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uq3qu"]
+texture = SubResource("CompressedTexture2D_o57t2")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0p6qk"]
+load_path = "res://.godot/imported/button.png-e4854ecd3deb8db3a920fd46c3f7ca45.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s4bmq"]
+texture = SubResource("CompressedTexture2D_0p6qk")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_r8nfu"]
+load_path = "res://.godot/imported/button.png-e4854ecd3deb8db3a920fd46c3f7ca45.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vumy4"]
+texture = SubResource("CompressedTexture2D_r8nfu")
+
+[node name="GameOver" type="Control" unique_id=1195291567]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_racf3")
+
+[node name="Panel" type="Panel" parent="." unique_id=1589015329]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_2jtsn")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=58072225]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -330.0
+offset_top = -15.0
+offset_right = 330.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="HBoxContainer" unique_id=772714473]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.827451, 0.63529414, 0.4862745, 1)
+theme_override_colors/font_focus_color = Color(0.827451, 0.63529414, 0.4862745, 1)
+theme_override_colors/font_pressed_color = Color(0.827451, 0.63529414, 0.4862745, 1)
+theme_override_colors/font_hover_color = Color(0.827451, 0.63529414, 0.4862745, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.827451, 0.63529414, 0.4862745, 1)
+theme_override_fonts/font = ExtResource("3_v3hpu")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_8bugq")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_56v3a")
+theme_override_styles/hover = SubResource("StyleBoxTexture_uq3qu")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_s4bmq")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxTexture_vumy4")
+text = "PLAY AGAIN"
+script = ExtResource("5_7m3ot")
+
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=1253865023]
+layout_mode = 2
+
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_play_again_pressed"]
