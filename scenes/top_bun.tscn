@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://c3xxuwf64vohd"]
+
+[ext_resource type="Texture2D" uid="uid://dpgtsqytwubxg" path="res://textures/cooking/hamburger_bun_top.png" id="1_4kiuu"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_vbmrj"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4kiuu"]
+radius = 16.270105
+height = 35.1072
+
+[node name="TopBun" type="Node2D" groups=["top_bun"]]
+
+[node name="TopBunImage" type="Sprite2D" parent="."]
+scale = Vector2(0.40510008, 0.40510008)
+texture = ExtResource("1_4kiuu")
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_vbmrj")]
+scale = Vector2(19.91, 19.91)
+target = NodePath("..")
+visual_target = NodePath("../TopBunImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+position = Vector2(-0.60271215, -0.100452036)
+rotation = -2.178171
+scale = Vector2(1.0000001, 1.0000001)
+shape = SubResource("CapsuleShape2D_4kiuu")
+
+[editable path="DraggableComponent"]

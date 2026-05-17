@@ -1,10 +1,36 @@
 [gd_scene format=3 uid="uid://dhqovbpq7keta"]
 
 [ext_resource type="Texture2D" uid="uid://c26l4rraf0v70" path="res://textures/cooking/hamburger_grill_slot.png" id="1_fw2ci"]
-[ext_resource type="Script" uid="uid://cpmhqh7vulfj3" path="res://scripts/hamburger_grill_slot.gd" id="1_udsns"]
+[ext_resource type="Script" uid="uid://bla60oixn8dw0" path="res://scripts/hamburger_grill_slot.gd" id="1_udsns"]
+[ext_resource type="PackedScene" uid="uid://cs8k1jgkwhxak" path="res://scenes/snap_slot_component.tscn" id="3_0yhyy"]
 
-[node name="HamburgerGrillSlot" type="Node2D" unique_id=1563292212]
+[sub_resource type="CircleShape2D" id="CircleShape2D_udsns"]
+radius = 119.2057
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dmqno"]
+radius = 113.0
+height = 238.0
+
+[node name="HamburgerGrillSlot" type="Area2D" unique_id=282448395]
 script = ExtResource("1_udsns")
 
 [node name="HamburgerGrillSlotImage" type="Sprite2D" parent="." unique_id=797211185]
 texture = ExtResource("1_fw2ci")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1023124174]
+scale = Vector2(1, 0.95)
+shape = SubResource("CircleShape2D_udsns")
+debug_color = Color(0, 0.60038817, 0.7021107, 0)
+
+[node name="SnapSlotComponent" parent="." unique_id=1965550086 instance=ExtResource("3_0yhyy")]
+accepted_group = "hamburger"
+
+[node name="CollisionShape2D" parent="SnapSlotComponent" index="0" unique_id=2092225329]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_dmqno")
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+
+[editable path="SnapSlotComponent"]

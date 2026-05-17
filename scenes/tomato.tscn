@@ -1,8 +1,22 @@
 [gd_scene format=3 uid="uid://d2ivf0ln4eixb"]
 
 [ext_resource type="Texture2D" uid="uid://bfrexcwm478yd" path="res://textures/cooking/hamburger_tomato.png" id="1_tsxsy"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_tsxsy"]
 
-[node name="Tomato" type="Node2D" unique_id=1520563275]
+[sub_resource type="CircleShape2D" id="CircleShape2D_tsxsy"]
+radius = 620.0
+
+[node name="Tomato" type="Node2D" unique_id=1520563275 groups=["dressing_item"]]
 
 [node name="TomatoImage" type="Sprite2D" parent="." unique_id=239010941]
+scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_tsxsy")
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_tsxsy")]
+target = NodePath("..")
+visual_target = NodePath("../TomatoImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+shape = SubResource("CircleShape2D_tsxsy")
+
+[editable path="DraggableComponent"]

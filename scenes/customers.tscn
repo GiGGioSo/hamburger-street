@@ -1,3 +1,42 @@
 [gd_scene format=3 uid="uid://gj5hdlab16ot"]
 
+[ext_resource type="Texture2D" uid="uid://dw707845erpby" path="res://textures/costumer_tuca.png" id="1_xrvpw"]
+[ext_resource type="Texture2D" uid="uid://d0e12vtm74tvt" path="res://textures/tuca_closed_mouth.png" id="2_qf884"]
+[ext_resource type="Texture2D" uid="uid://rqls8xg3ipm2" path="res://textures/tuca_open_mouth.png" id="3_g71pu"]
+[ext_resource type="Texture2D" uid="uid://pmf5gnfvp503" path="res://textures/costumer_speckle.png" id="4_hc56i"]
+[ext_resource type="Texture2D" uid="uid://bsyatmnqox8rr" path="res://textures/speckle_closed_mouth.png" id="5_gbbbf"]
+[ext_resource type="Texture2D" uid="uid://c4nsc4e8vyfji" path="res://textures/speckle_open_mouth.png" id="6_n2jt6"]
+
 [node name="Customers" type="Node2D" unique_id=353441749]
+
+[node name="TucaImage" type="Sprite2D" parent="."]
+position = Vector2(170, 390)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_xrvpw")
+
+[node name="TucaClosedMouthImage" type="Sprite2D" parent="."]
+position = Vector2(206, 358)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_qf884")
+
+[node name="TucaOpenMouthImage" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(206, 358)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_g71pu")
+
+[node name="SpeckleImage" type="Sprite2D" parent="."]
+position = Vector2(500, 375)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_hc56i")
+
+[node name="SpeckleClosedMouthImage" type="Sprite2D" parent="."]
+position = Vector2(451, 320)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("5_gbbbf")
+
+[node name="SpeckleOpenMouthImage" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(451, 320)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("6_n2jt6")

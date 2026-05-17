@@ -1,0 +1,146 @@
+class_name DraggableComponent
+extends Area2D
+
+signal drag_started(item: Node2D, drag_component: DraggableComponent)
+signal drag_ended(item: Node2D, drag_component: DraggableComponent)
+
+static var active_drag_component: DraggableComponent = null
+
+@export var target: Node2D
+@export var visual_target: Node2D
+@export var drag_scale := 1.1
+@export var drag_parent: Node
+
+var dragging := false
+var drag_enabled := true
+var grab_offset := Vector2.ZERO
+
+var original_visual_scale := Vector2.ONE
+var original_z_index := 0
+
+func _ready() -> void:
+	add_to_group("draggable_component")
+	input_pickable = true
+
+	if target == null:
+		target = get_parent() as Node2D
+
+	if visual_target == null:
+		visual_target = target
+
+	if drag_parent == null:
+		drag_parent = get_tree().current_scene
+
+	if visual_target:
+		original_visual_scale = visual_target.scale
+
+	if target:
+		original_z_index = target.z_index
+
+	if not mouse_entered.is_connected(_on_mouse_entered):
+		mouse_entered.connect(_on_mouse_entered)
+
+	if not mouse_exited.is_connected(_on_mouse_exited):
+		mouse_exited.connect(_on_mouse_exited)
+
+func _input_event(_viewport, event, _shape_idx) -> void:
+	if not target or not drag_enabled:
+		return
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			start_drag()
+		else:
+			_end_drag()
+
+func _input(event: InputEvent) -> void:
+	if dragging and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		_end_drag()
+
+func _process(_delta: float) -> void:
+	if dragging and target:
+		target.global_position = get_global_mouse_position() + grab_offset
+
+func start_drag() -> void:
+	if dragging or not drag_enabled:
+		return
+
+	if is_drag_active() and active_drag_component != self:
+		return
+
+	if target == null:
+		target = get_parent() as Node2D
+
+	if visual_target == null:
+		visual_target = target
+
+	if drag_parent == null:
+		drag_parent = get_tree().current_scene
+
+	_start_drag()
+
+func _start_drag() -> void:
+	if not target:
+		return
+
+	dragging = true
+	active_drag_component = self
+
+	set_visual_scaled(false)
+
+	if target.get_parent() != drag_parent:
+		target.reparent(drag_parent, true)
+
+	grab_offset = target.global_position - get_global_mouse_position()
+
+	set_visual_scaled(true)
+	target.z_index = 100
+
+	drag_started.emit(target, self)
+
+func _end_drag() -> void:
+	if not dragging:
+		return
+
+	dragging = false
+	if active_drag_component == self:
+		active_drag_component = null
+
+	set_visual_scaled(false)
+	target.z_index = original_z_index
+
+	drag_ended.emit(target, self)
+
+func set_drag_enabled(enabled: bool) -> void:
+	drag_enabled = enabled
+	input_pickable = enabled
+
+	if not enabled and not dragging:
+		set_visual_scaled(false)
+
+static func is_drag_active() -> bool:
+	return is_instance_valid(active_drag_component) and active_drag_component.dragging
+
+func set_visual_scaled(enabled: bool) -> void:
+	if not visual_target:
+		return
+
+	if enabled:
+		visual_target.scale = original_visual_scale * drag_scale
+	else:
+		visual_target.scale = original_visual_scale
+
+func _on_mouse_entered() -> void:
+	if not target or dragging or not drag_enabled:
+		return
+
+	if is_drag_active() and active_drag_component != self:
+		return
+
+	set_visual_scaled(true)
+
+func _on_mouse_exited() -> void:
+	if not target or dragging:
+		return
+
+	set_visual_scaled(false)

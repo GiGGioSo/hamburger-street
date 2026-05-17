@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cs8k1jgkwhxak"]
+
+[ext_resource type="Script" uid="uid://2n8dtihlb4tw" path="res://scripts/snap_slot_component.gd" id="1_jlo5c"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ktycc"]
+
+[node name="SnapSlotComponent" type="Area2D" unique_id=1965550086]
+script = ExtResource("1_jlo5c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2092225329]
+shape = SubResource("CircleShape2D_ktycc")

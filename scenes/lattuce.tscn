@@ -1,8 +1,22 @@
 [gd_scene format=3 uid="uid://d1yr0ebk48l0i"]
 
 [ext_resource type="Texture2D" uid="uid://co2c38cd6e6ac" path="res://textures/cooking/hamburger_lattuce.png" id="1_vbp7j"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_vbp7j"]
 
-[node name="Lattuce" type="Node2D" unique_id=490891247]
+[sub_resource type="CircleShape2D" id="CircleShape2D_vbp7j"]
+radius = 650.0
+
+[node name="Lattuce" type="Node2D" unique_id=490891247 groups=["dressing_item"]]
 
 [node name="LattuceImage" type="Sprite2D" parent="." unique_id=1040797247]
+scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_vbp7j")
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_vbp7j")]
+target = NodePath("..")
+visual_target = NodePath("../LattuceImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+shape = SubResource("CircleShape2D_vbp7j")
+
+[editable path="DraggableComponent"]

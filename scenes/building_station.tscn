@@ -1,3 +1,17 @@
 [gd_scene format=3 uid="uid://cv6kcgs8r2seg"]
 
+[ext_resource type="Script" uid="uid://cgxenw2hm22rd" path="res://scripts/building_station.gd" id="1_4y083"]
+[ext_resource type="PackedScene" uid="uid://diyu8jhm68wkd" path="res://scenes/building_slot_component.tscn" id="2_r6f77"]
+
 [node name="BuildingStation" type="Node2D" unique_id=1940847143]
+script = ExtResource("1_4y083")
+
+[node name="Slots" type="Node2D" parent="." unique_id=1992432906]
+
+[node name="BuildSlot1" parent="Slots" unique_id=510214102 instance=ExtResource("2_r6f77")]
+
+[node name="BuildSlot2" parent="Slots" unique_id=1043618028 instance=ExtResource("2_r6f77")]
+position = Vector2(150, 0)
+
+[node name="BuildSlot3" parent="Slots" unique_id=1225173177 instance=ExtResource("2_r6f77")]
+position = Vector2(300, 0)

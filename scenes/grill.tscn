@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://bro1pmia6ydqx"]
 
 [ext_resource type="Texture2D" uid="uid://bc0732o7mwblm" path="res://textures/cooking/cooking_scene_grill.png" id="1_70781"]
+[ext_resource type="Script" uid="uid://ho3na5repk1u" path="res://scripts/grill.gd" id="1_fdqnf"]
 [ext_resource type="PackedScene" uid="uid://dhqovbpq7keta" path="res://scenes/hamburger_grill_slot.tscn" id="3_fdqnf"]
 
 [node name="Grill" type="Node2D" unique_id=404518404]
+script = ExtResource("1_fdqnf")
 
 [node name="GrillImage" type="Sprite2D" parent="." unique_id=396813333]
 texture = ExtResource("1_70781")

@@ -2,21 +2,94 @@
 
 [ext_resource type="PackedScene" uid="uid://bro1pmia6ydqx" path="res://scenes/grill.tscn" id="1_kcvj3"]
 [ext_resource type="PackedScene" uid="uid://ctdaw7k24adwd" path="res://scenes/dressing.tscn" id="2_4yrxt"]
+[ext_resource type="Texture2D" uid="uid://bcb2gow765smo" path="res://textures/cooking/cooking_scene_wall.png" id="3_qdbgs"]
+[ext_resource type="Texture2D" uid="uid://qy84bvjuvwr0" path="res://textures/cooking/cooking_scene_table.png" id="4_6adq8"]
+[ext_resource type="Texture2D" uid="uid://c0sonekk5sqpv" path="res://textures/cooking/cooking_scene_orders_pannel.png" id="5_82y40"]
+[ext_resource type="Texture2D" uid="uid://cr5vspe5s0mr6" path="res://textures/cooking/dressing_tomatoes.png" id="7_a3ywr"]
+[ext_resource type="Texture2D" uid="uid://bmtpoviy37us4" path="res://textures/cooking/dressing_onions.png" id="8_ta0sv"]
+[ext_resource type="Texture2D" uid="uid://c3rr2hjn0srhb" path="res://textures/cooking/dressing_cheese.png" id="9_67mg2"]
+[ext_resource type="Texture2D" uid="uid://bg45n6jioth4l" path="res://textures/cooking/ketchup_bottle.png" id="10_p1y1p"]
+[ext_resource type="Texture2D" uid="uid://mnwynf5wy21c" path="res://textures/cooking/majo_bottle.png" id="11_jhyxg"]
+[ext_resource type="Texture2D" uid="uid://club68exkk0yy" path="res://textures/cooking/senf_bottle.png" id="12_7xpld"]
+[ext_resource type="PackedScene" uid="uid://d2ivf0ln4eixb" path="res://scenes/tomato.tscn" id="14_ybfmf"]
+[ext_resource type="PackedScene" uid="uid://prpuxxs33wwy" path="res://scenes/onion.tscn" id="15_8rswh"]
+[ext_resource type="PackedScene" uid="uid://b1bmnve3ogc6a" path="res://scenes/cheese.tscn" id="16_rhyla"]
+[ext_resource type="PackedScene" uid="uid://cv6kcgs8r2seg" path="res://scenes/building_station.tscn" id="17_kiul1"]
+[ext_resource type="PackedScene" uid="uid://bsovgb23nf4e8" path="res://scenes/draggable_item_spawner.tscn" id="18_gyr62"]
+[ext_resource type="PackedScene" uid="uid://cgys8cxslc1sk" path="res://scenes/hamburger.tscn" id="19_4q2bn"]
+[ext_resource type="PackedScene" uid="uid://c3xxuwf64vohd" path="res://scenes/top_bun.tscn" id="20_gww28"]
+[ext_resource type="Texture2D" uid="uid://dpagjuvx2jm03" path="res://textures/cooking/hamburger_patty_raw.png" id="21_u8awr"]
+[ext_resource type="Texture2D" uid="uid://dpgtsqytwubxg" path="res://textures/cooking/hamburger_bun_top.png" id="22_hn0vx"]
 
 [node name="Cooking" type="Node2D" unique_id=457705942]
 
+[node name="WallImage" type="Sprite2D" parent="." unique_id=570227825]
+z_index = -30
+position = Vector2(221, 359)
+texture = ExtResource("3_qdbgs")
+
+[node name="TableImage" type="Sprite2D" parent="." unique_id=1911144787]
+z_index = -20
+position = Vector2(576, 486)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("4_6adq8")
+
+[node name="OrdersPanelImage" type="Sprite2D" parent="." unique_id=109364278]
+z_index = -10
+position = Vector2(86.99999, 316.9999)
+scale = Vector2(0.48490238, 0.48490238)
+texture = ExtResource("5_82y40")
+
 [node name="Grill" parent="." unique_id=404518404 instance=ExtResource("1_kcvj3")]
-position = Vector2(573, 156)
+position = Vector2(543, 153)
 scale = Vector2(0.41, 0.41)
 
+[node name="HamburgerSpawner" parent="." instance=ExtResource("18_gyr62")]
+position = Vector2(148, 66)
+spawner_texture = ExtResource("21_u8awr")
+item_scene = ExtResource("19_4q2bn")
+
+[node name="TopBunSpawner" parent="." instance=ExtResource("18_gyr62")]
+position = Vector2(148, 258)
+spawner_texture = ExtResource("22_hn0vx")
+item_scene = ExtResource("20_gww28")
+
 [node name="LettuceDressing" parent="." unique_id=921694542 instance=ExtResource("2_4yrxt")]
-position = Vector2(584, 391)
+position = Vector2(276, 380)
+scale = Vector2(0.411184, 0.411184)
 
 [node name="TomatoDressing" parent="." unique_id=1909185182 instance=ExtResource("2_4yrxt")]
-position = Vector2(289, 395)
+position = Vector2(454.0425, 380)
+scale = Vector2(0.411184, 0.411184)
+dressing_texture = ExtResource("7_a3ywr")
+item_scene = ExtResource("14_ybfmf")
 
 [node name="OnionDressing" parent="." unique_id=24208898 instance=ExtResource("2_4yrxt")]
-position = Vector2(437, 392)
+position = Vector2(632.085, 380)
+scale = Vector2(0.411184, 0.411184)
+dressing_texture = ExtResource("8_ta0sv")
+item_scene = ExtResource("15_8rswh")
 
 [node name="CheddarDressing" parent="." unique_id=53107446 instance=ExtResource("2_4yrxt")]
-position = Vector2(729, 392)
+position = Vector2(810.1275, 380)
+scale = Vector2(0.411184, 0.411184)
+dressing_texture = ExtResource("9_67mg2")
+item_scene = ExtResource("16_rhyla")
+
+[node name="KetchupBottleImage" type="Sprite2D" parent="." unique_id=714631606]
+position = Vector2(876, 455)
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("10_p1y1p")
+
+[node name="MajoBottleImage" type="Sprite2D" parent="." unique_id=1412997951]
+position = Vector2(936, 455)
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("11_jhyxg")
+
+[node name="SenfBottleImage" type="Sprite2D" parent="." unique_id=638029602]
+position = Vector2(996, 455)
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("12_7xpld")
+
+[node name="BuildingStation" parent="." instance=ExtResource("17_kiul1")]
+position = Vector2(392, 535)
