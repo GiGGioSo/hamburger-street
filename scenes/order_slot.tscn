@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://ce2sx8c5mj2wg"]
+
+[ext_resource type="Script" uid="uid://ca8yk011r4d58" path="res://scripts/order_slot.gd" id="1_w4hsl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w4hsl"]
+size = Vector2(155, 120)
+
+[node name="OrderSlot" type="Area2D" unique_id=806163099]
+script = ExtResource("1_w4hsl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1095184234]
+shape = SubResource("RectangleShape2D_w4hsl")
+debug_color = Color(0.989128, 0.845316, 0.321336, 0)
+
+[node name="ItemsRoot" type="Node2D" parent="." unique_id=1735825125]
+position = Vector2(-20, 30)

@@ -55,7 +55,7 @@ func _clear_stale_item() -> void:
 		_release_current_item()
 
 func _release_current_item() -> void:
-	var released_item := current_item
+	var released_item: Node2D = current_item
 
 	if is_instance_valid(current_drag_component) and current_drag_component.drag_started.is_connected(_on_current_item_drag_started):
 		current_drag_component.drag_started.disconnect(_on_current_item_drag_started)

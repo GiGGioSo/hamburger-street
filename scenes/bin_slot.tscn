@@ -2,16 +2,30 @@
 
 [ext_resource type="Script" uid="uid://bj6lja1hgus7p" path="res://scripts/bin_slot.gd" id="1_xpqus"]
 [ext_resource type="Texture2D" uid="uid://jyvkkoufmfox" path="res://textures/cooking/bin.png" id="2_vb32y"]
+[ext_resource type="Texture2D" uid="uid://dqa4ws7kct0d5" path="res://textures/cooking/hamburger_patty_burnt.png" id="3_46qis"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xpqus"]
 size = Vector2(96, 92)
 
-[node name="BinSlot" type="Area2D"]
+[node name="BinSlot" type="Area2D" unique_id=22217520]
 script = ExtResource("1_xpqus")
 
-[node name="BinImage" type="Sprite2D" parent="."]
+[node name="BinImage" type="Sprite2D" parent="." unique_id=157333135]
 scale = Vector2(0.22, 0.22)
 texture = ExtResource("2_vb32y")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="BurntIcon" type="Sprite2D" parent="." unique_id=991294637]
+position = Vector2(-14, 57)
+scale = Vector2(0.01885593, 0.018855928)
+texture = ExtResource("3_46qis")
+
+[node name="CountLabel" type="Label" parent="." unique_id=1229734987]
+offset_left = 6.0
+offset_top = 46.0
+offset_right = 50.0
+offset_bottom = 76.0
+text = "5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=817188930]
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_xpqus")

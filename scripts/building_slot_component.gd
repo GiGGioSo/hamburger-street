@@ -6,14 +6,14 @@ signal item_released(item: Node2D, slot: BuildingSlotComponent)
 signal slot_completed(slot: BuildingSlotComponent)
 signal burger_confirmed(slot: BuildingSlotComponent)
 
-@export var accepted_groups := PackedStringArray(["hamburger", "dressing_item", "top_bun"])
+@export var accepted_groups: PackedStringArray = PackedStringArray(["hamburger", "dressing_item", "top_bun"])
 @export var max_items := 6
 @export var stack_offset := Vector2(0, -14)
 @export var item_base_offset := Vector2(0, -4)
 @export var top_bun_group := "top_bun"
 @export var confirm_button_path := NodePath("ConfirmButton")
 
-@onready var confirm_button := get_node_or_null(confirm_button_path) as Button
+@onready var confirm_button: Button = get_node_or_null(confirm_button_path) as Button
 
 var items: Array[Node2D] = []
 var is_completed := false
@@ -37,6 +37,10 @@ func can_accept(item: Node2D) -> bool:
 	if items.size() >= max_items:
 		return false
 
+	var hamburger: Hamburger = item as Hamburger
+	if hamburger and hamburger.is_burnt():
+		return false
+
 	if not _is_accepted_item(item):
 		return false
 
@@ -49,7 +53,7 @@ func snap(item: Node2D) -> bool:
 	if not can_accept(item):
 		return false
 
-	var drag := _find_drag_component(item)
+	var drag: DraggableComponent = _find_drag_component(item)
 	items.append(item)
 
 	if drag:
@@ -74,18 +78,59 @@ func snap(item: Node2D) -> bool:
 func restore_dragged_item(item: Node2D) -> bool:
 	return snap(item)
 
+func get_ingredient_sequence() -> Array[StringName]:
+	var sequence: Array[StringName] = [&"bottom_bun"]
+	for item in items:
+		if not is_instance_valid(item):
+			continue
+
+		var ingredient_id: StringName = _get_ingredient_id(item)
+		if ingredient_id != &"":
+			sequence.append(ingredient_id)
+
+	return sequence
+
+func has_burnt_patty() -> bool:
+	for item in items:
+		var hamburger: Hamburger = item as Hamburger
+		if hamburger and hamburger.is_burnt():
+			return true
+
+	return false
+
+func consume_items_for_completed_burger() -> Array[Node2D]:
+	var consumed: Array[Node2D] = []
+	for item in items:
+		if not is_instance_valid(item):
+			continue
+
+		var drag: DraggableComponent = item_drag_components.get(item) as DraggableComponent
+		if is_instance_valid(drag):
+			if drag.drag_started.is_connected(_on_item_drag_started):
+				drag.drag_started.disconnect(_on_item_drag_started)
+			drag.set_drag_enabled(false)
+
+		consumed.append(item)
+
+	items.clear()
+	item_drag_components.clear()
+	is_completed = false
+	_set_confirm_visible(false)
+	return consumed
+
 func _is_accepted_item(item: Node2D) -> bool:
 	if item == null:
 		return false
 
-	for group_name in accepted_groups:
+	for group_name_variant in accepted_groups:
+		var group_name: StringName = StringName(group_name_variant)
 		if item.is_in_group(group_name):
 			return true
 
 	return false
 
 func _has_matching_ingredient(item: Node2D) -> bool:
-	var ingredient_id := _get_ingredient_id(item)
+	var ingredient_id: StringName = _get_ingredient_id(item)
 	if ingredient_id == &"":
 		return false
 
@@ -99,7 +144,7 @@ func _has_matching_ingredient(item: Node2D) -> bool:
 	return false
 
 func _get_ingredient_id(item: Node2D) -> StringName:
-	var ingredient := item.get_node_or_null("BurgerIngredient") as BurgerIngredient
+	var ingredient: BurgerIngredient = item.get_node_or_null("BurgerIngredient") as BurgerIngredient
 	if ingredient and ingredient.ingredient_id != &"":
 		return ingredient.ingredient_id
 
@@ -121,7 +166,7 @@ func _release_item(item: Node2D) -> void:
 	if not items.has(item):
 		return
 
-	var drag := item_drag_components.get(item) as DraggableComponent
+	var drag: DraggableComponent = item_drag_components.get(item) as DraggableComponent
 	if is_instance_valid(drag) and drag.drag_started.is_connected(_on_item_drag_started):
 		drag.drag_started.disconnect(_on_item_drag_started)
 
@@ -141,7 +186,7 @@ func _release_item(item: Node2D) -> void:
 
 func _refresh_stack() -> void:
 	for index in range(items.size()):
-		var item := items[index]
+		var item: Node2D = items[index]
 		if not is_instance_valid(item):
 			continue
 
@@ -157,7 +202,7 @@ func _refresh_stack_drag_enabled() -> void:
 		if not is_instance_valid(item):
 			continue
 
-		var drag := item_drag_components.get(item) as DraggableComponent
+		var drag: DraggableComponent = item_drag_components.get(item) as DraggableComponent
 		if drag == null:
 			drag = _find_drag_component(item)
 
@@ -185,7 +230,7 @@ func _on_confirm_button_pressed() -> void:
 	burger_confirmed.emit(self)
 
 func _find_drag_component(node: Node) -> DraggableComponent:
-	var drag := node as DraggableComponent
+	var drag: DraggableComponent = node as DraggableComponent
 	if drag:
 		return drag
 

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dpagjuvx2jm03" path="res://textures/cooking/hamburger_patty_raw.png" id="1_pchkq"]
 [ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_hiqje"]
 [ext_resource type="Texture2D" uid="uid://bhfq33corye8r" path="res://textures/cooking/hamburger_patty_well_done.png" id="3_jyssn"]
-[ext_resource type="Texture2D" uid="uid://fguntrfu6lrd" path="res://textures/cooking/hamburger_patty_overdone.png" id="4_05tak"]
+[ext_resource type="Texture2D" uid="uid://dqa4ws7kct0d5" path="res://textures/cooking/hamburger_patty_burnt.png" id="4_05tak"]
 [ext_resource type="Script" uid="uid://dyb3d0xo876k2" path="res://scripts/burger_ingredient.gd" id="5_rg4dk"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ckrjf"]

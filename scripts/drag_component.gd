@@ -132,7 +132,13 @@ func set_drag_enabled(enabled: bool) -> void:
 		set_visual_scaled(false)
 
 func mark_drop_accepted() -> void:
+	if drop_accepted:
+		return
+
 	drop_accepted = true
+	var game: Node = get_tree().get_first_node_in_group("game_controller")
+	if game and game.has_method("report_successful_interaction"):
+		game.call("report_successful_interaction", target)
 
 func is_drop_accepted() -> bool:
 	return drop_accepted
@@ -167,7 +173,7 @@ func _restore_to_origin_slot() -> bool:
 	if not drag_origin_parent.has_method("restore_dragged_item"):
 		return false
 
-	var restored := bool(drag_origin_parent.call("restore_dragged_item", target))
+	var restored: bool = bool(drag_origin_parent.call("restore_dragged_item", target))
 	if restored:
 		mark_drop_accepted()
 

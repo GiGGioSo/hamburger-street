@@ -10,8 +10,8 @@ extends Node2D
 @export var item_scene: PackedScene
 @export var spawned_item_scale := Vector2(0.12, 0.12)
 
-@onready var dressing_image := $DressingImage as Sprite2D
-@onready var dressing_area := $DressingArea as Area2D
+@onready var dressing_image: Sprite2D = $DressingImage as Sprite2D
+@onready var dressing_area: Area2D = $DressingArea as Area2D
 
 func _ready() -> void:
 	_update_texture()
@@ -38,12 +38,12 @@ func _spawn_item_for_drag() -> void:
 		push_warning("Dressing is missing an item scene: %s" % get_path())
 		return
 
-	var item := item_scene.instantiate() as Node2D
+	var item: Node2D = item_scene.instantiate() as Node2D
 	if item == null:
 		push_warning("Dressing item scene must instantiate a Node2D: %s" % get_path())
 		return
 
-	var spawn_parent := get_parent()
+	var spawn_parent: Node = get_parent()
 	if spawn_parent == null:
 		spawn_parent = get_tree().current_scene
 
@@ -51,7 +51,7 @@ func _spawn_item_for_drag() -> void:
 	item.global_position = get_global_mouse_position()
 	item.scale = spawned_item_scale
 
-	var drag := _find_drag_component(item)
+	var drag: DraggableComponent = _find_drag_component(item)
 	if drag == null:
 		push_warning("Spawned dressing item is missing a DraggableComponent: %s" % item.get_path())
 		return
@@ -61,7 +61,7 @@ func _spawn_item_for_drag() -> void:
 	drag.start_drag()
 
 func _find_drag_component(node: Node) -> DraggableComponent:
-	var drag := node as DraggableComponent
+	var drag: DraggableComponent = node as DraggableComponent
 	if drag:
 		return drag
 
@@ -73,7 +73,7 @@ func _find_drag_component(node: Node) -> DraggableComponent:
 	return null
 
 func _update_texture() -> void:
-	var image := dressing_image
+	var image: Sprite2D = dressing_image
 	if image == null:
 		image = get_node_or_null("DressingImage") as Sprite2D
 

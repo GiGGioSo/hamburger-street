@@ -11,9 +11,9 @@ enum CookStage {
 @export var points_to_burnt := 5
 @export var raw_texture: Texture2D = preload("res://textures/cooking/hamburger_patty_raw.png")
 @export var cooked_texture: Texture2D = preload("res://textures/cooking/hamburger_patty_well_done.png")
-@export var burnt_texture: Texture2D = preload("res://textures/cooking/hamburger_patty_overdone.png")
+@export var burnt_texture: Texture2D = preload("res://textures/cooking/hamburger_patty_burnt.png")
 
-@onready var hamburger_image := $HamburgerImage as Sprite2D
+@onready var hamburger_image: Sprite2D = $HamburgerImage as Sprite2D
 
 var cook_stage := CookStage.RAW
 var cook_points_in_stage := 0

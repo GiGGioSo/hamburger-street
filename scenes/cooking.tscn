@@ -21,8 +21,10 @@
 [ext_resource type="PackedScene" uid="uid://cfkqky4amg5yp" path="res://scenes/majo_bottle.tscn" id="23_6vkyr"]
 [ext_resource type="PackedScene" uid="uid://ky3tugkpb0r" path="res://scenes/senf_bottle.tscn" id="24_qtotc"]
 [ext_resource type="PackedScene" uid="uid://dsxjjsrqnr8tr" path="res://scenes/bin_slot.tscn" id="25_i4elh"]
+[ext_resource type="Script" uid="uid://dflp4jm24byhv" path="res://scripts/cooking.gd" id="26_jvnqj"]
 
 [node name="Cooking" type="Node2D" unique_id=457705942]
+script = ExtResource("26_jvnqj")
 
 [node name="WallImage" type="Sprite2D" parent="." unique_id=570227825]
 z_index = -30
@@ -46,7 +48,7 @@ position = Vector2(543, 153)
 scale = Vector2(0.41, 0.41)
 
 [node name="HamburgerSpawner" parent="." unique_id=149177798 instance=ExtResource("18_gyr62")]
-position = Vector2(236, 47)
+position = Vector2(237, 64)
 spawner_texture = ExtResource("21_u8awr")
 item_scene = ExtResource("19_4q2bn")
 
@@ -90,5 +92,5 @@ position = Vector2(1020, 554)
 position = Vector2(1080, 554)
 
 [node name="BinSlot" parent="." unique_id=465013021 instance=ExtResource("25_i4elh")]
-position = Vector2(1025, 292)
-scale = Vector2(2.2052932, 2.2052932)
+position = Vector2(1019, 328)
+scale = Vector2(1.715, 1.715)

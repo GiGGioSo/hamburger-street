@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bplw4kls7aw5j"]
+
+[ext_resource type="Script" uid="uid://ctayeq3l8pupw" path="res://scripts/completed_burger.gd" id="1_pce8h"]
+[ext_resource type="Texture2D" uid="uid://dnm3dw8xgw661" path="res://textures/cooking/hamburger_bun_base.png" id="2_v7cnc"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="3_ku2rx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pce8h"]
+radius = 62.0
+
+[node name="CompletedBurger" type="Node2D" groups=["completed_burger"]]
+script = ExtResource("1_pce8h")
+
+[node name="BunBaseImage" type="Sprite2D" parent="."]
+z_index = 0
+scale = Vector2(0.055, 0.055)
+texture = ExtResource("2_v7cnc")
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("3_ku2rx")]
+target = NodePath("..")
+visual_target = NodePath("..")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+shape = SubResource("CircleShape2D_pce8h")
+
+[editable path="DraggableComponent"]

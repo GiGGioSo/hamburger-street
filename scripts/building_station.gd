@@ -3,10 +3,11 @@ extends Node2D
 
 signal burger_confirmed(slot: BuildingSlotComponent, items: Array)
 
-@export var accepted_groups := PackedStringArray(["hamburger", "dressing_item", "top_bun"])
+@export var accepted_groups: PackedStringArray = PackedStringArray(["hamburger", "dressing_item", "top_bun"])
 @export var slots_root_path := NodePath("Slots")
+@export var completed_burger_scene: PackedScene = preload("res://scenes/completed_burger.tscn")
 
-@onready var slots_root := get_node_or_null(slots_root_path)
+@onready var slots_root: Node = get_node_or_null(slots_root_path)
 
 var slots: Array[BuildingSlotComponent] = []
 var connected_drag_components: Array[DraggableComponent] = []
@@ -35,7 +36,7 @@ func _connect_slots() -> void:
 		slots_root = self
 
 	for child in slots_root.get_children():
-		var slot := child as BuildingSlotComponent
+		var slot: BuildingSlotComponent = child as BuildingSlotComponent
 		if slot == null:
 			slot = child.get_node_or_null("BuildingSlotComponent") as BuildingSlotComponent
 
@@ -48,7 +49,8 @@ func _connect_slots() -> void:
 			slot.burger_confirmed.connect(_on_slot_burger_confirmed)
 
 func _connect_existing_build_items() -> void:
-	for group_name in accepted_groups:
+	for group_name_variant in accepted_groups:
+		var group_name: StringName = StringName(group_name_variant)
 		for item in get_tree().get_nodes_in_group(group_name):
 			_connect_build_item(item)
 
@@ -59,11 +61,11 @@ func _connect_build_item(node: Node) -> void:
 	if not is_instance_valid(node):
 		return
 
-	var item := node as Node2D
+	var item: Node2D = node as Node2D
 	if item == null or not _is_accepted_item(item):
 		return
 
-	var drag := _find_drag_component(item)
+	var drag: DraggableComponent = _find_drag_component(item)
 	if drag == null:
 		push_warning("Build item is missing a DraggableComponent: %s" % item.get_path())
 		return
@@ -84,7 +86,7 @@ func _on_build_item_drag_ended(item: Node2D, drag: DraggableComponent) -> void:
 		return
 
 	for area in drag.get_overlapping_areas():
-		var slot := area as BuildingSlotComponent
+		var slot: BuildingSlotComponent = area as BuildingSlotComponent
 		if slot == null or not slots.has(slot):
 			continue
 
@@ -92,19 +94,27 @@ func _on_build_item_drag_ended(item: Node2D, drag: DraggableComponent) -> void:
 			return
 
 func _is_accepted_item(item: Node2D) -> bool:
-	for group_name in accepted_groups:
+	for group_name_variant in accepted_groups:
+		var group_name: StringName = StringName(group_name_variant)
 		if item.is_in_group(group_name):
 			return true
 
 	return false
 
 func _on_slot_burger_confirmed(slot: BuildingSlotComponent) -> void:
-	var built_items := slot.items.duplicate()
+	var ingredient_sequence: Array[StringName] = slot.get_ingredient_sequence()
+	var has_burnt_patty: bool = slot.has_burnt_patty()
+	var built_items: Array[Node2D] = slot.consume_items_for_completed_burger()
+
+	var completed_burger: CompletedBurger = completed_burger_scene.instantiate() as CompletedBurger
+	get_tree().current_scene.add_child(completed_burger)
+	completed_burger.global_position = slot.global_position
+	completed_burger.setup_burger(ingredient_sequence, built_items, has_burnt_patty)
+
 	burger_confirmed.emit(slot, built_items)
-	print("Burger confirmed from %s with %d stacked items." % [slot.name, built_items.size()])
 
 func _find_drag_component(node: Node) -> DraggableComponent:
-	var drag := node as DraggableComponent
+	var drag: DraggableComponent = node as DraggableComponent
 	if drag:
 		return drag
 

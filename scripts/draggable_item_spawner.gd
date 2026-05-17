@@ -16,8 +16,8 @@ signal item_spawned(item: Node2D)
 		display_scale = value
 		_update_display_scale()
 
-@onready var spawner_image := $SpawnerImage as Sprite2D
-@onready var spawner_area := $SpawnerArea as Area2D
+@onready var spawner_image: Sprite2D = $SpawnerImage as Sprite2D
+@onready var spawner_area: Area2D = $SpawnerArea as Area2D
 
 func _ready() -> void:
 	_update_texture()
@@ -45,12 +45,12 @@ func _spawn_item_for_drag() -> void:
 		push_warning("Draggable item spawner is missing an item scene: %s" % get_path())
 		return
 
-	var item := item_scene.instantiate() as Node2D
+	var item: Node2D = item_scene.instantiate() as Node2D
 	if item == null:
 		push_warning("Spawner item scene must instantiate a Node2D: %s" % get_path())
 		return
 
-	var spawn_parent := get_parent()
+	var spawn_parent: Node = get_parent()
 	if spawn_parent == null:
 		spawn_parent = get_tree().current_scene
 
@@ -58,7 +58,7 @@ func _spawn_item_for_drag() -> void:
 	item.global_position = get_global_mouse_position()
 	item.scale = spawned_item_scale
 
-	var drag := _find_drag_component(item)
+	var drag: DraggableComponent = _find_drag_component(item)
 	if drag == null:
 		push_warning("Spawned item is missing a DraggableComponent: %s" % item.get_path())
 		return
@@ -69,7 +69,7 @@ func _spawn_item_for_drag() -> void:
 	item_spawned.emit(item)
 
 func _find_drag_component(node: Node) -> DraggableComponent:
-	var drag := node as DraggableComponent
+	var drag: DraggableComponent = node as DraggableComponent
 	if drag:
 		return drag
 
@@ -81,7 +81,7 @@ func _find_drag_component(node: Node) -> DraggableComponent:
 	return null
 
 func _update_texture() -> void:
-	var image := spawner_image
+	var image: Sprite2D = spawner_image
 	if image == null:
 		image = get_node_or_null("SpawnerImage") as Sprite2D
 
@@ -89,7 +89,7 @@ func _update_texture() -> void:
 		image.texture = spawner_texture
 
 func _update_display_scale() -> void:
-	var image := spawner_image
+	var image: Sprite2D = spawner_image
 	if image == null:
 		image = get_node_or_null("SpawnerImage") as Sprite2D
 

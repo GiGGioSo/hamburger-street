@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://c1ebpkpue5jw0"]
+
+[ext_resource type="Script" uid="uid://dgadq87f177wp" path="res://scripts/customer.gd" id="1_p7x3a"]
+[ext_resource type="Texture2D" uid="uid://dw707845erpby" path="res://textures/costumer_tuca.png" id="2_uyxbw"]
+[ext_resource type="Texture2D" uid="uid://d0e12vtm74tvt" path="res://textures/tuca_closed_mouth.png" id="3_m2xqg"]
+[ext_resource type="Texture2D" uid="uid://rqls8xg3ipm2" path="res://textures/tuca_open_mouth.png" id="4_qs6nw"]
+[ext_resource type="Texture2D" uid="uid://c6kmhkkdtibma" path="res://textures/order_chat.png" id="5_vqw3o"]
+
+[node name="Customer" type="Node2D"]
+script = ExtResource("1_p7x3a")
+
+[node name="BodyImage" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_uyxbw")
+
+[node name="ClosedMouthImage" type="Sprite2D" parent="."]
+position = Vector2(36, -32)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_m2xqg")
+
+[node name="OpenMouthImage" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(36, -32)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_qs6nw")
+
+[node name="OrderChat" type="Node2D" parent="."]
+z_index = 30
+position = Vector2(150, -145)
+scale = Vector2(0.25, 0.25)
+
+[node name="OrderChatImage" type="Sprite2D" parent="OrderChat"]
+texture = ExtResource("5_vqw3o")
+
+[node name="OrderItems" type="Node2D" parent="OrderChat"]
+position = Vector2(-150, 130)
+
+[node name="ProgressBar" type="ProgressBar" parent="OrderChat"]
+offset_left = -225.0
+offset_top = 225.0
+offset_right = 225.0
+offset_bottom = 250.0
+max_value = 100.0
+show_percentage = false
