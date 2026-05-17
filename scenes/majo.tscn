@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://buhgd1s67xff2"]
+
+[ext_resource type="Texture2D" uid="uid://dx1fu0dslefki" path="res://textures/cooking/hamburger_majo.png" id="1_nohxl"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_34v0m"]
+[ext_resource type="Script" uid="uid://dyb3d0xo876k2" path="res://scripts/burger_ingredient.gd" id="3_n5git"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nohxl"]
+radius = 48.0
+
+[node name="Majo" type="Node2D" groups=["dressing_item"]]
+
+[node name="MajoImage" type="Sprite2D" parent="."]
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("1_nohxl")
+
+[node name="BurgerIngredient" type="Node" parent="."]
+script = ExtResource("3_n5git")
+ingredient_id = &"majo"
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_34v0m")]
+target = NodePath("..")
+visual_target = NodePath("../MajoImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+shape = SubResource("CircleShape2D_nohxl")
+
+[editable path="DraggableComponent"]

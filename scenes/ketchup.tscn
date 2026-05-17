@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b0j4kkeypj0wa"]
+
+[ext_resource type="Texture2D" uid="uid://2iooxiq6riel" path="res://textures/cooking/hamburger_ketchup.png" id="1_3l12g"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_ukgaj"]
+[ext_resource type="Script" uid="uid://dyb3d0xo876k2" path="res://scripts/burger_ingredient.gd" id="3_l2ksu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3l12g"]
+radius = 48.0
+
+[node name="Ketchup" type="Node2D" groups=["dressing_item"]]
+
+[node name="KetchupImage" type="Sprite2D" parent="."]
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("1_3l12g")
+
+[node name="BurgerIngredient" type="Node" parent="."]
+script = ExtResource("3_l2ksu")
+ingredient_id = &"ketchup"
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_ukgaj")]
+target = NodePath("..")
+visual_target = NodePath("../KetchupImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+shape = SubResource("CircleShape2D_3l12g")
+
+[editable path="DraggableComponent"]

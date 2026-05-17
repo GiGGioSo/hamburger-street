@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bn3j0gjy5u1yf" path="res://textures/cooking/hamburger_onions.png" id="1_b3a42"]
 [ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_b3a42"]
+[ext_resource type="Script" uid="uid://dyb3d0xo876k2" path="res://scripts/burger_ingredient.gd" id="3_qsjvm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b3a42"]
 radius = 720.0
@@ -11,6 +12,10 @@ radius = 720.0
 [node name="OnionImage" type="Sprite2D" parent="." unique_id=960655588]
 scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_b3a42")
+
+[node name="BurgerIngredient" type="Node" parent="."]
+script = ExtResource("3_qsjvm")
+ingredient_id = &"onion"
 
 [node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_b3a42")]
 target = NodePath("..")

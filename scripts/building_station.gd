@@ -77,6 +77,9 @@ func _connect_build_item(node: Node) -> void:
 	connected_drag_components.append(drag)
 
 func _on_build_item_drag_ended(item: Node2D, drag: DraggableComponent) -> void:
+	if drag.is_drop_accepted():
+		return
+
 	if not _is_accepted_item(item):
 		return
 

@@ -64,6 +64,7 @@ func _spawn_item_for_drag() -> void:
 		return
 
 	drag.drag_parent = spawn_parent
+	drag.failed_drop_behavior = DraggableComponent.FailedDropBehavior.DESPAWN
 	drag.start_drag()
 	item_spawned.emit(item)
 

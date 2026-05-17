@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dpgtsqytwubxg" path="res://textures/cooking/hamburger_bun_top.png" id="1_4kiuu"]
 [ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_vbmrj"]
+[ext_resource type="Script" uid="uid://dyb3d0xo876k2" path="res://scripts/burger_ingredient.gd" id="3_s5w20"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4kiuu"]
 radius = 16.270105
@@ -12,6 +13,10 @@ height = 35.1072
 [node name="TopBunImage" type="Sprite2D" parent="."]
 scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_4kiuu")
+
+[node name="BurgerIngredient" type="Node" parent="."]
+script = ExtResource("3_s5w20")
+ingredient_id = &"top_bun"
 
 [node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_vbmrj")]
 scale = Vector2(19.91, 19.91)

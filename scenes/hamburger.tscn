@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_hiqje"]
 [ext_resource type="Texture2D" uid="uid://bhfq33corye8r" path="res://textures/cooking/hamburger_patty_well_done.png" id="3_jyssn"]
 [ext_resource type="Texture2D" uid="uid://fguntrfu6lrd" path="res://textures/cooking/hamburger_patty_overdone.png" id="4_05tak"]
+[ext_resource type="Script" uid="uid://dyb3d0xo876k2" path="res://scripts/burger_ingredient.gd" id="5_rg4dk"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ckrjf"]
 radius = 16.270105
@@ -19,6 +20,10 @@ burnt_texture = ExtResource("4_05tak")
 [node name="HamburgerImage" type="Sprite2D" parent="." unique_id=518248946]
 scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_pchkq")
+
+[node name="BurgerIngredient" type="Node" parent="."]
+script = ExtResource("5_rg4dk")
+ingredient_id = &"patty"
 
 [node name="DraggableComponent" parent="." unique_id=407861881 node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_hiqje")]
 scale = Vector2(19.91, 19.91)
