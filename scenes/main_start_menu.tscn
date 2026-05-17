@@ -1,5 +1,28 @@
 [gd_scene format=3 uid="uid://cnhpe0tt82ieq"]
 
+[ext_resource type="Script" uid="uid://rf1g64ddtd0j" path="res://scenes/main_start_menu.gd" id="1_ocx8q"]
+[ext_resource type="Texture2D" uid="uid://pascisuwthv1" path="res://textures/start/homepage.png" id="2_mu75n"]
+[ext_resource type="FontFile" uid="uid://ckida6khky0h5" path="res://textures/assets/PoorRichardOpti.otf" id="3_uao1n"]
+[ext_resource type="Texture2D" uid="uid://ydy2owuss4hy" path="res://textures/assets/button.png" id="4_iwmk4"]
+[ext_resource type="Script" uid="uid://ce3dxk1o8ax26" path="res://scenes/button.gd" id="5_mu75n"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bxxnx"]
+texture = ExtResource("2_mu75n")
+modulate_color = Color(0.8158153, 0.81581545, 0.8158154, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dobq5"]
+texture = ExtResource("4_iwmk4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3rvxu"]
+texture = ExtResource("4_iwmk4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_team7"]
+texture = ExtResource("4_iwmk4")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmn5n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_66wb2"]
+
 [node name="MainStartMenu" type="Control" unique_id=643658068]
 layout_mode = 3
 anchors_preset = 15
@@ -7,3 +30,44 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ocx8q")
+
+[node name="Panel" type="Panel" parent="." unique_id=1391941248]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_bxxnx")
+
+[node name="Button" type="Button" parent="." unique_id=1706915692]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -244.5
+offset_top = 53.75
+offset_right = 244.5
+offset_bottom = 214.25
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(500, 172)
+theme_override_colors/font_color = Color(0.72156864, 0.62352943, 0.47058824, 1)
+theme_override_colors/font_focus_color = Color(0.72156864, 0.62352943, 0.47058824, 1)
+theme_override_colors/font_pressed_color = Color(0.72156864, 0.62352943, 0.47058824, 1)
+theme_override_colors/font_hover_color = Color(0.72156864, 0.62352943, 0.47058824, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.72156864, 0.62352943, 0.47058824, 1)
+theme_override_fonts/font = ExtResource("3_uao1n")
+theme_override_font_sizes/font_size = 90
+theme_override_styles/normal = SubResource("StyleBoxTexture_dobq5")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3rvxu")
+theme_override_styles/hover = SubResource("StyleBoxTexture_team7")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmn5n")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_66wb2")
+text = "START"
+script = ExtResource("5_mu75n")
+
+[connection signal="pressed" from="Button" to="." method="_on_start_pressed"]
