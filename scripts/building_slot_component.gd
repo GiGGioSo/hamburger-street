@@ -37,7 +37,13 @@ func can_accept(item: Node2D) -> bool:
 	if items.size() >= max_items:
 		return false
 
-	return _is_accepted_item(item)
+	if not _is_accepted_item(item):
+		return false
+
+	if _has_matching_ingredient(item):
+		return false
+
+	return true
 
 func snap(item: Node2D) -> bool:
 	if not can_accept(item):
@@ -47,6 +53,7 @@ func snap(item: Node2D) -> bool:
 	items.append(item)
 
 	if drag:
+		drag.mark_drop_accepted()
 		item_drag_components[item] = drag
 		if not drag.drag_started.is_connected(_on_item_drag_started):
 			drag.drag_started.connect(_on_item_drag_started)
@@ -64,6 +71,9 @@ func snap(item: Node2D) -> bool:
 
 	return true
 
+func restore_dragged_item(item: Node2D) -> bool:
+	return snap(item)
+
 func _is_accepted_item(item: Node2D) -> bool:
 	if item == null:
 		return false
@@ -73,6 +83,34 @@ func _is_accepted_item(item: Node2D) -> bool:
 			return true
 
 	return false
+
+func _has_matching_ingredient(item: Node2D) -> bool:
+	var ingredient_id := _get_ingredient_id(item)
+	if ingredient_id == &"":
+		return false
+
+	for stacked_item in items:
+		if not is_instance_valid(stacked_item) or stacked_item == item:
+			continue
+
+		if _get_ingredient_id(stacked_item) == ingredient_id:
+			return true
+
+	return false
+
+func _get_ingredient_id(item: Node2D) -> StringName:
+	var ingredient := item.get_node_or_null("BurgerIngredient") as BurgerIngredient
+	if ingredient and ingredient.ingredient_id != &"":
+		return ingredient.ingredient_id
+
+	if item.is_in_group("hamburger"):
+		return &"patty"
+	if item.is_in_group("top_bun"):
+		return &"top_bun"
+	if item.is_in_group("dressing_item"):
+		return StringName(String(item.name).to_snake_case())
+
+	return &""
 
 func _clear_stale_items() -> void:
 	for item in items.duplicate():

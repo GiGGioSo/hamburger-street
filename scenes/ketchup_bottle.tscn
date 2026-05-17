@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cd37h5b1x4w8q"]
+
+[ext_resource type="Script" uid="uid://dku13f3wnmvuj" path="res://scripts/sauce_bottle.gd" id="1_4c7t2"]
+[ext_resource type="Texture2D" uid="uid://bg45n6jioth4l" path="res://textures/cooking/ketchup_bottle.png" id="2_b3g5t"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="3_0mdx8"]
+[ext_resource type="PackedScene" uid="uid://b0j4kkeypj0wa" path="res://scenes/ketchup.tscn" id="4_n3mxp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4c7t2"]
+size = Vector2(64, 162)
+
+[node name="KetchupBottle" type="Node2D" groups=["sauce_bottle"]]
+script = ExtResource("1_4c7t2")
+sauce_scene = ExtResource("4_n3mxp")
+
+[node name="BottleImage" type="Sprite2D" parent="."]
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("2_b3g5t")
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("3_0mdx8")]
+target = NodePath("..")
+visual_target = NodePath("../BottleImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+shape = SubResource("RectangleShape2D_4c7t2")
+
+[editable path="DraggableComponent"]

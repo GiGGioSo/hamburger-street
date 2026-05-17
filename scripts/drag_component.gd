@@ -4,19 +4,28 @@ extends Area2D
 signal drag_started(item: Node2D, drag_component: DraggableComponent)
 signal drag_ended(item: Node2D, drag_component: DraggableComponent)
 
+enum FailedDropBehavior {
+	RETURN_TO_ORIGIN,
+	DESPAWN,
+}
+
 static var active_drag_component: DraggableComponent = null
 
 @export var target: Node2D
 @export var visual_target: Node2D
 @export var drag_scale := 1.1
 @export var drag_parent: Node
+@export var failed_drop_behavior := FailedDropBehavior.RETURN_TO_ORIGIN
 
 var dragging := false
 var drag_enabled := true
+var drop_accepted := false
 var grab_offset := Vector2.ZERO
 
 var original_visual_scale := Vector2.ONE
-var original_z_index := 0
+var drag_origin_parent: Node = null
+var drag_origin_global_position := Vector2.ZERO
+var drag_origin_z_index := 0
 
 func _ready() -> void:
 	add_to_group("draggable_component")
@@ -33,9 +42,6 @@ func _ready() -> void:
 
 	if visual_target:
 		original_visual_scale = visual_target.scale
-
-	if target:
-		original_z_index = target.z_index
 
 	if not mouse_entered.is_connected(_on_mouse_entered):
 		mouse_entered.connect(_on_mouse_entered)
@@ -85,6 +91,10 @@ func _start_drag() -> void:
 
 	dragging = true
 	active_drag_component = self
+	drop_accepted = false
+	drag_origin_parent = target.get_parent()
+	drag_origin_global_position = target.global_position
+	drag_origin_z_index = target.z_index
 
 	set_visual_scaled(false)
 
@@ -107,9 +117,12 @@ func _end_drag() -> void:
 		active_drag_component = null
 
 	set_visual_scaled(false)
-	target.z_index = original_z_index
+	target.z_index = drag_origin_z_index
 
 	drag_ended.emit(target, self)
+
+	if not drop_accepted and is_instance_valid(target):
+		_handle_failed_drop()
 
 func set_drag_enabled(enabled: bool) -> void:
 	drag_enabled = enabled
@@ -118,8 +131,47 @@ func set_drag_enabled(enabled: bool) -> void:
 	if not enabled and not dragging:
 		set_visual_scaled(false)
 
+func mark_drop_accepted() -> void:
+	drop_accepted = true
+
+func is_drop_accepted() -> bool:
+	return drop_accepted
+
+func return_to_drag_origin() -> void:
+	if not is_instance_valid(target):
+		return
+
+	if is_instance_valid(drag_origin_parent) and target.get_parent() != drag_origin_parent:
+		target.reparent(drag_origin_parent, true)
+
+	target.global_position = drag_origin_global_position
+	target.z_index = drag_origin_z_index
+
 static func is_drag_active() -> bool:
 	return is_instance_valid(active_drag_component) and active_drag_component.dragging
+
+func _handle_failed_drop() -> void:
+	if _restore_to_origin_slot():
+		return
+
+	match failed_drop_behavior:
+		FailedDropBehavior.RETURN_TO_ORIGIN:
+			return_to_drag_origin()
+		FailedDropBehavior.DESPAWN:
+			target.queue_free()
+
+func _restore_to_origin_slot() -> bool:
+	if not is_instance_valid(drag_origin_parent):
+		return false
+
+	if not drag_origin_parent.has_method("restore_dragged_item"):
+		return false
+
+	var restored := bool(drag_origin_parent.call("restore_dragged_item", target))
+	if restored:
+		mark_drop_accepted()
+
+	return restored
 
 func set_visual_scaled(enabled: bool) -> void:
 	if not visual_target:

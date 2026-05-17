@@ -8,18 +8,19 @@
 [ext_resource type="Texture2D" uid="uid://cr5vspe5s0mr6" path="res://textures/cooking/dressing_tomatoes.png" id="7_a3ywr"]
 [ext_resource type="Texture2D" uid="uid://bmtpoviy37us4" path="res://textures/cooking/dressing_onions.png" id="8_ta0sv"]
 [ext_resource type="Texture2D" uid="uid://c3rr2hjn0srhb" path="res://textures/cooking/dressing_cheese.png" id="9_67mg2"]
-[ext_resource type="Texture2D" uid="uid://bg45n6jioth4l" path="res://textures/cooking/ketchup_bottle.png" id="10_p1y1p"]
-[ext_resource type="Texture2D" uid="uid://mnwynf5wy21c" path="res://textures/cooking/majo_bottle.png" id="11_jhyxg"]
-[ext_resource type="Texture2D" uid="uid://club68exkk0yy" path="res://textures/cooking/senf_bottle.png" id="12_7xpld"]
 [ext_resource type="PackedScene" uid="uid://d2ivf0ln4eixb" path="res://scenes/tomato.tscn" id="14_ybfmf"]
 [ext_resource type="PackedScene" uid="uid://prpuxxs33wwy" path="res://scenes/onion.tscn" id="15_8rswh"]
 [ext_resource type="PackedScene" uid="uid://b1bmnve3ogc6a" path="res://scenes/cheese.tscn" id="16_rhyla"]
 [ext_resource type="PackedScene" uid="uid://cv6kcgs8r2seg" path="res://scenes/building_station.tscn" id="17_kiul1"]
 [ext_resource type="PackedScene" uid="uid://bsovgb23nf4e8" path="res://scenes/draggable_item_spawner.tscn" id="18_gyr62"]
 [ext_resource type="PackedScene" uid="uid://cgys8cxslc1sk" path="res://scenes/hamburger.tscn" id="19_4q2bn"]
+[ext_resource type="PackedScene" uid="uid://cd37h5b1x4w8q" path="res://scenes/ketchup_bottle.tscn" id="20_a8o5c"]
 [ext_resource type="PackedScene" uid="uid://c3xxuwf64vohd" path="res://scenes/top_bun.tscn" id="20_gww28"]
 [ext_resource type="Texture2D" uid="uid://dpagjuvx2jm03" path="res://textures/cooking/hamburger_patty_raw.png" id="21_u8awr"]
 [ext_resource type="Texture2D" uid="uid://dpgtsqytwubxg" path="res://textures/cooking/hamburger_bun_top.png" id="22_hn0vx"]
+[ext_resource type="PackedScene" uid="uid://cfkqky4amg5yp" path="res://scenes/majo_bottle.tscn" id="23_6vkyr"]
+[ext_resource type="PackedScene" uid="uid://ky3tugkpb0r" path="res://scenes/senf_bottle.tscn" id="24_qtotc"]
+[ext_resource type="PackedScene" uid="uid://dsxjjsrqnr8tr" path="res://scenes/bin_slot.tscn" id="25_i4elh"]
 
 [node name="Cooking" type="Node2D" unique_id=457705942]
 
@@ -44,13 +45,13 @@ texture = ExtResource("5_82y40")
 position = Vector2(543, 153)
 scale = Vector2(0.41, 0.41)
 
-[node name="HamburgerSpawner" parent="." instance=ExtResource("18_gyr62")]
-position = Vector2(148, 66)
+[node name="HamburgerSpawner" parent="." unique_id=149177798 instance=ExtResource("18_gyr62")]
+position = Vector2(236, 47)
 spawner_texture = ExtResource("21_u8awr")
 item_scene = ExtResource("19_4q2bn")
 
-[node name="TopBunSpawner" parent="." instance=ExtResource("18_gyr62")]
-position = Vector2(148, 258)
+[node name="TopBunSpawner" parent="." unique_id=268094226 instance=ExtResource("18_gyr62")]
+position = Vector2(265, 554)
 spawner_texture = ExtResource("22_hn0vx")
 item_scene = ExtResource("20_gww28")
 
@@ -76,20 +77,18 @@ scale = Vector2(0.411184, 0.411184)
 dressing_texture = ExtResource("9_67mg2")
 item_scene = ExtResource("16_rhyla")
 
-[node name="KetchupBottleImage" type="Sprite2D" parent="." unique_id=714631606]
-position = Vector2(876, 455)
-scale = Vector2(0.045, 0.045)
-texture = ExtResource("10_p1y1p")
+[node name="BuildingStation" parent="." unique_id=1091394535 instance=ExtResource("17_kiul1")]
+position = Vector2(474, 550)
 
-[node name="MajoBottleImage" type="Sprite2D" parent="." unique_id=1412997951]
-position = Vector2(936, 455)
-scale = Vector2(0.045, 0.045)
-texture = ExtResource("11_jhyxg")
+[node name="KetchupBottle" parent="." unique_id=381246359 instance=ExtResource("20_a8o5c")]
+position = Vector2(960, 554)
 
-[node name="SenfBottleImage" type="Sprite2D" parent="." unique_id=638029602]
-position = Vector2(996, 455)
-scale = Vector2(0.045, 0.045)
-texture = ExtResource("12_7xpld")
+[node name="MajoBottle" parent="." unique_id=758727493 instance=ExtResource("23_6vkyr")]
+position = Vector2(1020, 554)
 
-[node name="BuildingStation" parent="." instance=ExtResource("17_kiul1")]
-position = Vector2(392, 535)
+[node name="SenfBottle" parent="." unique_id=1557338235 instance=ExtResource("24_qtotc")]
+position = Vector2(1080, 554)
+
+[node name="BinSlot" parent="." unique_id=465013021 instance=ExtResource("25_i4elh")]
+position = Vector2(1025, 292)
+scale = Vector2(2.2052932, 2.2052932)

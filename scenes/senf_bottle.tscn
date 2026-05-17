@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://ky3tugkpb0r"]
+
+[ext_resource type="Script" uid="uid://dku13f3wnmvuj" path="res://scripts/sauce_bottle.gd" id="1_8odpx"]
+[ext_resource type="Texture2D" uid="uid://club68exkk0yy" path="res://textures/cooking/senf_bottle.png" id="2_2qgxj"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="3_gppog"]
+[ext_resource type="PackedScene" uid="uid://djyp2udpoekdu" path="res://scenes/senf.tscn" id="4_6sifm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8odpx"]
+size = Vector2(64, 162)
+
+[node name="SenfBottle" type="Node2D" groups=["sauce_bottle"]]
+script = ExtResource("1_8odpx")
+sauce_scene = ExtResource("4_6sifm")
+
+[node name="BottleImage" type="Sprite2D" parent="."]
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("2_2qgxj")
+
+[node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("3_gppog")]
+target = NodePath("..")
+visual_target = NodePath("../BottleImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0"]
+shape = SubResource("RectangleShape2D_8odpx")
+
+[editable path="DraggableComponent"]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bfrexcwm478yd" path="res://textures/cooking/hamburger_tomato.png" id="1_tsxsy"]
 [ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_tsxsy"]
+[ext_resource type="Script" uid="uid://dyb3d0xo876k2" path="res://scripts/burger_ingredient.gd" id="3_o36bl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tsxsy"]
 radius = 620.0
@@ -11,6 +12,10 @@ radius = 620.0
 [node name="TomatoImage" type="Sprite2D" parent="." unique_id=239010941]
 scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_tsxsy")
+
+[node name="BurgerIngredient" type="Node" parent="."]
+script = ExtResource("3_o36bl")
+ingredient_id = &"tomato"
 
 [node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_tsxsy")]
 target = NodePath("..")

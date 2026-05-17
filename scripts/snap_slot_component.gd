@@ -30,12 +30,22 @@ func snap(item: Node2D) -> void:
 	current_item = item
 
 	current_drag_component = item.get_node_or_null("DraggableComponent") as DraggableComponent
+	if current_drag_component:
+		current_drag_component.mark_drop_accepted()
+
 	if current_drag_component and not current_drag_component.drag_started.is_connected(_on_current_item_drag_started):
 		current_drag_component.drag_started.connect(_on_current_item_drag_started)
 
 	item.reparent(self)
 	item.position = snap_offset
 	item_snapped.emit(item, self)
+
+func restore_dragged_item(item: Node2D) -> bool:
+	if not can_accept(item):
+		return false
+
+	snap(item)
+	return true
 
 func _clear_stale_item() -> void:
 	if current_item == null:

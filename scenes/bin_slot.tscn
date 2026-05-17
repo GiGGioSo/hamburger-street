@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dsxjjsrqnr8tr"]
+
+[ext_resource type="Script" uid="uid://bj6lja1hgus7p" path="res://scripts/bin_slot.gd" id="1_xpqus"]
+[ext_resource type="Texture2D" uid="uid://jyvkkoufmfox" path="res://textures/cooking/bin.png" id="2_vb32y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xpqus"]
+size = Vector2(96, 92)
+
+[node name="BinSlot" type="Area2D"]
+script = ExtResource("1_xpqus")
+
+[node name="BinImage" type="Sprite2D" parent="."]
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("2_vb32y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_xpqus")

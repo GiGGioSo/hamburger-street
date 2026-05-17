@@ -57,6 +57,9 @@ func _process(delta: float) -> void:
 		cooking_elapsed[slot] = elapsed
 
 func _on_hamburger_dropped(hamburger: Node2D, drag: DraggableComponent) -> void:
+	if drag.is_drop_accepted():
+		return
+
 	for area in drag.get_overlapping_areas():
 		var slot := area as SnapSlotComponent
 
