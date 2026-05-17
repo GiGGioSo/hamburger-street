@@ -1,8 +1,34 @@
 [gd_scene format=3 uid="uid://cgys8cxslc1sk"]
 
+[ext_resource type="Script" uid="uid://bge4w7gwjc0lg" path="res://scripts/hamburger.gd" id="1_ckrjf"]
 [ext_resource type="Texture2D" uid="uid://dpagjuvx2jm03" path="res://textures/cooking/hamburger_patty_raw.png" id="1_pchkq"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_hiqje"]
+[ext_resource type="Texture2D" uid="uid://bhfq33corye8r" path="res://textures/cooking/hamburger_patty_well_done.png" id="3_jyssn"]
+[ext_resource type="Texture2D" uid="uid://fguntrfu6lrd" path="res://textures/cooking/hamburger_patty_overdone.png" id="4_05tak"]
 
-[node name="Hamburger" type="Node2D" unique_id=1928382194]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ckrjf"]
+radius = 16.270105
+height = 35.1072
+
+[node name="Hamburger" type="Node2D" unique_id=1928382194 groups=["hamburger"]]
+script = ExtResource("1_ckrjf")
+raw_texture = ExtResource("1_pchkq")
+cooked_texture = ExtResource("3_jyssn")
+burnt_texture = ExtResource("4_05tak")
 
 [node name="HamburgerImage" type="Sprite2D" parent="." unique_id=518248946]
+scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_pchkq")
+
+[node name="DraggableComponent" parent="." unique_id=407861881 node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_hiqje")]
+scale = Vector2(19.91, 19.91)
+target = NodePath("..")
+visual_target = NodePath("../HamburgerImage")
+
+[node name="DraggableCollision" parent="DraggableComponent" index="0" unique_id=714751829]
+position = Vector2(-0.60271215, -0.100452036)
+rotation = -2.178171
+scale = Vector2(1.0000001, 1.0000001)
+shape = SubResource("CapsuleShape2D_ckrjf")
+
+[editable path="DraggableComponent"]

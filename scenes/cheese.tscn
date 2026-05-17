@@ -1,8 +1,26 @@
 [gd_scene format=3 uid="uid://b1bmnve3ogc6a"]
 
 [ext_resource type="Texture2D" uid="uid://btipkgga8018d" path="res://textures/cooking/hamburger_cheese.png" id="1_6ih6m"]
+[ext_resource type="PackedScene" uid="uid://b7uhcps1elxn7" path="res://scenes/draggable_component.tscn" id="2_gv6i6"]
 
-[node name="Cheese" type="Node2D" unique_id=347097755]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gv6i6"]
+size = Vector2(431.08472, 372.21378)
+
+[node name="Cheese" type="Node2D" unique_id=347097755 groups=["dressing_item"]]
 
 [node name="CheeseImage" type="Sprite2D" parent="." unique_id=706465700]
+scale = Vector2(0.40510008, 0.40510008)
 texture = ExtResource("1_6ih6m")
+
+[node name="DraggableComponent" parent="." unique_id=407861881 node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("2_gv6i6")]
+target = NodePath("..")
+visual_target = NodePath("../CheeseImage")
+
+[node name="DragCollision" parent="DraggableComponent" index="0" unique_id=714751829]
+position = Vector2(-15.143176, -24.354591)
+rotation = 0.4537856
+scale = Vector2(2.96, 2.96)
+skew = -0.012217283
+shape = SubResource("RectangleShape2D_gv6i6")
+
+[editable path="DraggableComponent"]

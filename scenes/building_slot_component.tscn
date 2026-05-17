@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://diyu8jhm68wkd"]
+
+[ext_resource type="Script" uid="uid://b0v5unty2sd2j" path="res://scripts/building_slot_component.gd" id="1_6ueow"]
+[ext_resource type="Texture2D" uid="uid://dnm3dw8xgw661" path="res://textures/cooking/hamburger_bun_base.png" id="2_3yoov"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6ueow"]
+radius = 64.0
+
+[node name="BuildingSlotComponent" type="Area2D"]
+script = ExtResource("1_6ueow")
+
+[node name="BunBaseImage" type="Sprite2D" parent="."]
+z_index = 0
+scale = Vector2(0.055, 0.055)
+texture = ExtResource("2_3yoov")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6ueow")
+debug_color = Color(0.318616, 0.673726, 0.227069, 0)
+
+[node name="ConfirmButton" type="Button" parent="."]
+visible = false
+offset_left = -34.0
+offset_top = 48.0
+offset_right = 34.0
+offset_bottom = 79.0
+text = "Confirm"
