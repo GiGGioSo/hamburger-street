@@ -74,6 +74,10 @@ func start_drag() -> void:
 	if is_drag_active() and active_drag_component != self:
 		return
 
+	var game: Node = get_tree().get_first_node_in_group("game_controller")
+	if game and game.has_method("report_cooking_action") and bool(game.call("report_cooking_action", target)):
+		return
+
 	if target == null:
 		target = get_parent() as Node2D
 

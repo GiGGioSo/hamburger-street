@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://buf0nvbjb70e" path="res://scenes/red_light.tscn" id="3_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://p33s30bwjyr1" path="res://scenes/green_light.tscn" id="4_lbhrr"]
 [ext_resource type="Script" uid="uid://c2ketm1vnqg20" path="res://scripts/game.gd" id="5_q6f3b"]
-[ext_resource type="Texture2D" uid="uid://c78j0b3h7oclv" path="res://textures/GameOver.png" id="6_5ee0e"]
+[ext_resource type="Texture2D" uid="uid://c78j0b3h7oclv" path="res://textures/gameOver/GameOver.png" id="6_5ee0e"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q6f3b"]
 radius = 80.0
@@ -13,40 +13,43 @@ radius = 80.0
 [node name="Game" type="Node2D" unique_id=126312487]
 script = ExtResource("5_q6f3b")
 
-[node name="Cooking" parent="." unique_id=457705942 instance=ExtResource("1_uwrxv")]
-
-[node name="Customers" parent="." unique_id=353441749 instance=ExtResource("2_yqjtg")]
-
-[node name="RedLight" parent="." unique_id=800926196 instance=ExtResource("3_lnu2h")]
-position = Vector2(1022.00006, 93)
-scale = Vector2(0.49, 0.49)
-
-[node name="Green Light" parent="." unique_id=472599219 instance=ExtResource("4_lbhrr")]
-position = Vector2(1021, 91)
-scale = Vector2(0.49, 0.49)
-
 [node name="SemaphoreArea" type="Area2D" parent="." unique_id=1788254725]
-position = Vector2(1050.77, 116)
+z_index = 200
+position = Vector2(1164, 112)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SemaphoreArea" unique_id=423411886]
 position = Vector2(-29.77002, -23)
 shape = SubResource("CircleShape2D_q6f3b")
 
+[node name="RedLight" parent="." unique_id=800926196 instance=ExtResource("3_lnu2h")]
+z_index = 200
+position = Vector2(1134, 90)
+scale = Vector2(0.49, 0.49)
+
+[node name="Green Light" parent="." unique_id=472599219 instance=ExtResource("4_lbhrr")]
+z_index = 200
+position = Vector2(1134, 90)
+scale = Vector2(0.49, 0.49)
+
+[node name="Cooking" parent="." unique_id=457705942 instance=ExtResource("1_uwrxv")]
+
+[node name="Customers" parent="." unique_id=353441749 instance=ExtResource("2_yqjtg")]
+
 [node name="CountdownLabel" type="Label" parent="." unique_id=464587675]
 visible = false
-offset_left = 520.0
+offset_left = 594.0
 offset_top = 260.0
-offset_right = 612.0
+offset_right = 686.0
 offset_bottom = 336.0
 theme_override_font_sizes/font_size = 64
 text = "3"
 horizontal_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=1943549865]
-offset_left = 928.0
-offset_top = 180.0
-offset_right = 1128.0
-offset_bottom = 214.0
+offset_left = 1035.0
+offset_top = 179.0
+offset_right = 1235.0
+offset_bottom = 213.0
 theme_override_font_sizes/font_size = 24
 text = "Score: 0"
 horizontal_alignment = 1
@@ -54,6 +57,6 @@ horizontal_alignment = 1
 [node name="GameOverImage" type="Sprite2D" parent="." unique_id=2062159684]
 visible = false
 z_index = 200
-position = Vector2(576, 324)
-scale = Vector2(0.45, 0.45)
+position = Vector2(640, 360)
+scale = Vector2(0.6052084, 0.59814817)
 texture = ExtResource("6_5ee0e")

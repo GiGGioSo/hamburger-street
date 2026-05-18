@@ -6,39 +6,39 @@
 [ext_resource type="Texture2D" uid="uid://rqls8xg3ipm2" path="res://textures/tuca_open_mouth.png" id="4_qs6nw"]
 [ext_resource type="Texture2D" uid="uid://c6kmhkkdtibma" path="res://textures/order_chat.png" id="5_vqw3o"]
 
-[node name="Customer" type="Node2D"]
+[node name="Customer" type="Node2D" unique_id=1310890571]
 script = ExtResource("1_p7x3a")
 
-[node name="BodyImage" type="Sprite2D" parent="."]
+[node name="BodyImage" type="Sprite2D" parent="." unique_id=438241638]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_uyxbw")
 
-[node name="ClosedMouthImage" type="Sprite2D" parent="."]
-position = Vector2(36, -32)
+[node name="ClosedMouthImage" type="Sprite2D" parent="." unique_id=120831501]
+position = Vector2(49, -13)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_m2xqg")
 
-[node name="OpenMouthImage" type="Sprite2D" parent="."]
+[node name="OpenMouthImage" type="Sprite2D" parent="." unique_id=32571064]
 visible = false
-position = Vector2(36, -32)
+position = Vector2(50, 5)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("4_qs6nw")
 
-[node name="OrderChat" type="Node2D" parent="."]
+[node name="OrderChat" type="Node2D" parent="." unique_id=128233875]
 z_index = 30
 position = Vector2(150, -145)
 scale = Vector2(0.25, 0.25)
 
-[node name="OrderChatImage" type="Sprite2D" parent="OrderChat"]
+[node name="OrderChatImage" type="Sprite2D" parent="OrderChat" unique_id=497762738]
+scale = Vector2(-1, 1)
 texture = ExtResource("5_vqw3o")
 
-[node name="OrderItems" type="Node2D" parent="OrderChat"]
-position = Vector2(-150, 130)
+[node name="OrderItems" type="Node2D" parent="OrderChat" unique_id=959777095]
+position = Vector2(8, 16)
 
-[node name="ProgressBar" type="ProgressBar" parent="OrderChat"]
-offset_left = -225.0
-offset_top = 225.0
-offset_right = 225.0
-offset_bottom = 250.0
-max_value = 100.0
+[node name="ProgressBar" type="ProgressBar" parent="OrderChat" unique_id=1616854569]
+offset_left = -256.0
+offset_top = 136.0
+offset_right = 292.0
+offset_bottom = 192.0
 show_percentage = false

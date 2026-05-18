@@ -30,6 +30,10 @@ func _on_dressing_area_input_event(_viewport, event: InputEvent, _shape_idx: int
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if _report_cooking_action():
+			get_viewport().set_input_as_handled()
+			return
+
 		_spawn_item_for_drag()
 		get_viewport().set_input_as_handled()
 
@@ -59,6 +63,13 @@ func _spawn_item_for_drag() -> void:
 	drag.drag_parent = spawn_parent
 	drag.failed_drop_behavior = DraggableComponent.FailedDropBehavior.DESPAWN
 	drag.start_drag()
+
+func _report_cooking_action() -> bool:
+	var game: Node = get_tree().get_first_node_in_group("game_controller")
+	if game == null or not game.has_method("report_cooking_action"):
+		return false
+
+	return bool(game.call("report_cooking_action", self))
 
 func _find_drag_component(node: Node) -> DraggableComponent:
 	var drag: DraggableComponent = node as DraggableComponent

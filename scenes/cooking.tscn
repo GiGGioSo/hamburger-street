@@ -28,69 +28,69 @@ script = ExtResource("26_jvnqj")
 
 [node name="WallImage" type="Sprite2D" parent="." unique_id=570227825]
 z_index = -30
-position = Vector2(221, 359)
+position = Vector2(220.5, 359)
 texture = ExtResource("3_qdbgs")
 
 [node name="TableImage" type="Sprite2D" parent="." unique_id=1911144787]
 z_index = -20
-position = Vector2(576, 486)
-scale = Vector2(0.55, 0.55)
+position = Vector2(662, 493)
+scale = Vector2(0.59, 0.59)
 texture = ExtResource("4_6adq8")
 
 [node name="OrdersPanelImage" type="Sprite2D" parent="." unique_id=109364278]
 z_index = -10
-position = Vector2(86.99999, 316.9999)
+position = Vector2(86.99999, 360)
 scale = Vector2(0.48490238, 0.48490238)
 texture = ExtResource("5_82y40")
 
 [node name="Grill" parent="." unique_id=404518404 instance=ExtResource("1_kcvj3")]
-position = Vector2(543, 153)
+position = Vector2(595, 153)
 scale = Vector2(0.41, 0.41)
 
 [node name="HamburgerSpawner" parent="." unique_id=149177798 instance=ExtResource("18_gyr62")]
-position = Vector2(237, 64)
+position = Vector2(257, 64)
 spawner_texture = ExtResource("21_u8awr")
 item_scene = ExtResource("19_4q2bn")
 
 [node name="TopBunSpawner" parent="." unique_id=268094226 instance=ExtResource("18_gyr62")]
-position = Vector2(265, 554)
+position = Vector2(288, 575)
 spawner_texture = ExtResource("22_hn0vx")
 item_scene = ExtResource("20_gww28")
 
 [node name="LettuceDressing" parent="." unique_id=921694542 instance=ExtResource("2_4yrxt")]
-position = Vector2(276, 380)
+position = Vector2(320, 386)
 scale = Vector2(0.411184, 0.411184)
 
 [node name="TomatoDressing" parent="." unique_id=1909185182 instance=ExtResource("2_4yrxt")]
-position = Vector2(454.0425, 380)
+position = Vector2(504, 386)
 scale = Vector2(0.411184, 0.411184)
 dressing_texture = ExtResource("7_a3ywr")
 item_scene = ExtResource("14_ybfmf")
 
 [node name="OnionDressing" parent="." unique_id=24208898 instance=ExtResource("2_4yrxt")]
-position = Vector2(632.085, 380)
+position = Vector2(688, 386)
 scale = Vector2(0.411184, 0.411184)
 dressing_texture = ExtResource("8_ta0sv")
 item_scene = ExtResource("15_8rswh")
 
 [node name="CheddarDressing" parent="." unique_id=53107446 instance=ExtResource("2_4yrxt")]
-position = Vector2(810.1275, 380)
+position = Vector2(872, 386)
 scale = Vector2(0.411184, 0.411184)
 dressing_texture = ExtResource("9_67mg2")
 item_scene = ExtResource("16_rhyla")
 
 [node name="BuildingStation" parent="." unique_id=1091394535 instance=ExtResource("17_kiul1")]
-position = Vector2(474, 550)
+position = Vector2(535, 575)
 
 [node name="KetchupBottle" parent="." unique_id=381246359 instance=ExtResource("20_a8o5c")]
-position = Vector2(960, 554)
+position = Vector2(1060, 575)
 
 [node name="MajoBottle" parent="." unique_id=758727493 instance=ExtResource("23_6vkyr")]
-position = Vector2(1020, 554)
+position = Vector2(1120, 575)
 
 [node name="SenfBottle" parent="." unique_id=1557338235 instance=ExtResource("24_qtotc")]
-position = Vector2(1080, 554)
+position = Vector2(1180, 575)
 
 [node name="BinSlot" parent="." unique_id=465013021 instance=ExtResource("25_i4elh")]
-position = Vector2(1019, 328)
+position = Vector2(1132, 328)
 scale = Vector2(1.715, 1.715)

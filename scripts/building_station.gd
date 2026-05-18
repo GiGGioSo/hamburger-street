@@ -102,6 +102,9 @@ func _is_accepted_item(item: Node2D) -> bool:
 	return false
 
 func _on_slot_burger_confirmed(slot: BuildingSlotComponent) -> void:
+	if _report_red_light_attempt():
+		return
+
 	var ingredient_sequence: Array[StringName] = slot.get_ingredient_sequence()
 	var has_burnt_patty: bool = slot.has_burnt_patty()
 	var built_items: Array[Node2D] = slot.consume_items_for_completed_burger()
@@ -112,6 +115,19 @@ func _on_slot_burger_confirmed(slot: BuildingSlotComponent) -> void:
 	completed_burger.setup_burger(ingredient_sequence, built_items, has_burnt_patty)
 
 	burger_confirmed.emit(slot, built_items)
+
+func _report_red_light_attempt() -> bool:
+	var game: Node = get_tree().get_first_node_in_group("game_controller")
+	if game == null or not game.has_method("is_red_light_active"):
+		return false
+
+	if not bool(game.call("is_red_light_active")):
+		return false
+
+	if game.has_method("report_successful_interaction"):
+		game.call("report_successful_interaction", self)
+
+	return true
 
 func _find_drag_component(node: Node) -> DraggableComponent:
 	var drag: DraggableComponent = node as DraggableComponent

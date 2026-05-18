@@ -94,7 +94,7 @@ func _can_delete(item: Node2D) -> bool:
 	return false
 
 func set_discard_count(discarded_count: int, max_discarded: int) -> void:
-	var remaining: int = max(0, max_discarded - discarded_count)
+	var remaining: int = maxi(0, max_discarded - discarded_count)
 	count_label.text = str(remaining)
 
 func _on_mouse_entered() -> void:

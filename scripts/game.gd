@@ -24,10 +24,15 @@ const OPTIONAL_INGREDIENTS := [
 	&"senf",
 ]
 
-@export var customer_spawn_chance := 0.3
+static var session_best_score: int = 0
+
 @export var max_active_orders := 5
 @export var red_countdown_seconds := 3.0
 @export var max_discarded_hamburgers := 5
+@export var min_order_processing_seconds := 30.0
+@export var max_order_processing_seconds := 75.0
+@export var score_for_min_order_processing_seconds := 20
+@export var game_over_scene: PackedScene = preload("res://scenes/game_over.tscn")
 
 @onready var cooking: CookingScene = $Cooking as CookingScene
 @onready var customers: CustomersScene = $Customers as CustomersScene
@@ -40,13 +45,17 @@ const OPTIONAL_INGREDIENTS := [
 
 var active_orders: Array[Dictionary] = []
 var completed_orders: Array[Dictionary] = []
+var timed_orders: Array[Dictionary] = []
 var score := 0
 var discarded_hamburgers := 0
 var is_red_light := false
 var is_game_over := false
 var red_countdown_remaining := 0.0
+var game_elapsed_seconds := 0.0
 var next_order_id := 1
 var rng := RandomNumberGenerator.new()
+var game_over_overlay: Control = null
+var game_over_layer: CanvasLayer = null
 
 func _ready() -> void:
 	add_to_group("game_controller")
@@ -60,7 +69,6 @@ func _ready() -> void:
 
 	cooking.setup_game(self)
 	customers.setup_game(self)
-	customers.spawn_chance = customer_spawn_chance
 
 	if not customers.customer_spawned.is_connected(_on_customer_spawned):
 		customers.customer_spawned.connect(_on_customer_spawned)
@@ -68,26 +76,24 @@ func _ready() -> void:
 	if not customers.all_customers_finished.is_connected(_on_all_customers_finished):
 		customers.all_customers_finished.connect(_on_all_customers_finished)
 
-	_show_cooking()
 	_set_red_light(false)
+	_show_customers()
 	_update_ui()
 
 func _process(delta: float) -> void:
-	if red_countdown_remaining <= 0.0 or is_game_over:
+	if is_game_over:
 		return
 
-	red_countdown_remaining = max(0.0, red_countdown_remaining - delta)
-	countdown_label.text = str(ceil(red_countdown_remaining))
+	game_elapsed_seconds += delta
 
-	if red_countdown_remaining <= 0.0:
-		countdown_label.visible = false
-		_set_red_light(true)
-		customers.stop_spawning_after_red()
-		if customers.is_idle():
-			_on_all_customers_finished()
+	if red_countdown_remaining > 0.0:
+		_process_red_countdown(delta)
+
+	_process_order_timers(delta)
 
 func create_random_order(customer_type: String) -> Dictionary:
 	var middle: Array[StringName] = [&"patty"]
+
 	for ingredient_variant in OPTIONAL_INGREDIENTS:
 		var ingredient: StringName = ingredient_variant
 		if rng.randf() < 0.5:
@@ -99,18 +105,41 @@ func create_random_order(customer_type: String) -> Dictionary:
 	ingredients.append_array(middle)
 	ingredients.append(&"top_bun")
 
+	var processing_seconds: float = _roll_order_processing_seconds()
 	var order: Dictionary = {
 		"id": next_order_id,
 		"customer_type": customer_type,
 		"ingredients": ingredients,
 		"total_ingredient_count": OPTIONAL_INGREDIENTS.size() + 3,
+		"time_limit_seconds": processing_seconds,
+		"time_remaining_seconds": processing_seconds,
+		"timer_started_seconds": game_elapsed_seconds,
 	}
+
 	next_order_id += 1
 	return order
 
 func add_order(order: Dictionary) -> void:
+	_update_order_remaining_time(order)
+	if _get_order_remaining_seconds(order) <= 0.0:
+		_trigger_game_over()
+		_refresh_orders()
+		return
+
 	active_orders.append(order)
 	_refresh_orders()
+
+func start_order_timer(order: Dictionary) -> void:
+	var time_limit_seconds: float = float(order.get("time_limit_seconds", _roll_order_processing_seconds()))
+	order["time_limit_seconds"] = time_limit_seconds
+	order["timer_started_seconds"] = game_elapsed_seconds
+	order["time_remaining_seconds"] = time_limit_seconds
+
+	if not _is_order_timer_tracked(int(order.get("id", -1))):
+		timed_orders.append(order)
+
+func is_customer_progress_active() -> bool:
+	return customers != null and customers.visible and not is_game_over
 
 func complete_order(order_id: int, points: int) -> void:
 	for index in range(active_orders.size()):
@@ -120,6 +149,7 @@ func complete_order(order_id: int, points: int) -> void:
 
 		active_orders.remove_at(index)
 		completed_orders.append(order)
+		_remove_tracked_order(order_id)
 		score += points
 		_refresh_orders()
 		_update_ui()
@@ -128,6 +158,16 @@ func complete_order(order_id: int, points: int) -> void:
 func report_successful_interaction(_source: Node = null) -> void:
 	if is_red_light and not is_game_over:
 		_trigger_game_over()
+
+func report_cooking_action(_source: Node = null) -> bool:
+	if cooking != null and cooking.visible and is_red_light and not is_game_over:
+		_trigger_game_over()
+		return true
+
+	return false
+
+func is_red_light_active() -> bool:
+	return is_red_light and not is_game_over
 
 func report_hamburger_discarded() -> void:
 	if is_game_over:
@@ -143,7 +183,11 @@ func get_ingredient_texture(ingredient_id: StringName) -> Texture2D:
 	return INGREDIENT_TEXTURES.get(String(ingredient_id)) as Texture2D
 
 func _on_customer_spawned() -> void:
-	if red_countdown_remaining > 0.0 or is_red_light:
+	if is_game_over or is_red_light or red_countdown_remaining > 0.0:
+		return
+
+	if not cooking.visible:
+		_set_red_light(true)
 		return
 
 	red_countdown_remaining = red_countdown_seconds
@@ -151,6 +195,7 @@ func _on_customer_spawned() -> void:
 	countdown_label.visible = true
 
 func _on_all_customers_finished() -> void:
+	_cancel_red_countdown()
 	_set_red_light(false)
 
 func _on_semaphore_input_event(_viewport, event: InputEvent, _shape_idx: int) -> void:
@@ -160,18 +205,18 @@ func _on_semaphore_input_event(_viewport, event: InputEvent, _shape_idx: int) ->
 	if not (event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed):
 		return
 
-	if cooking.visible and not is_red_light:
+	if cooking.visible:
 		_show_customers()
-	elif customers.visible and not is_red_light and customers.is_idle():
+	elif customers.visible:
 		_show_cooking()
 
 func _show_cooking() -> void:
 	cooking.visible = true
 	customers.visible = false
-	customers.stop_session()
 	_refresh_orders()
 
 func _show_customers() -> void:
+	_cancel_red_countdown()
 	cooking.visible = false
 	customers.visible = true
 	customers.start_session()
@@ -181,18 +226,115 @@ func _set_red_light(enabled: bool) -> void:
 	red_light.visible = enabled
 	green_light.visible = not enabled
 
+func _cancel_red_countdown() -> void:
+	red_countdown_remaining = 0.0
+	countdown_label.visible = false
+
 func _refresh_orders() -> void:
 	if cooking:
-		cooking.refresh_orders(active_orders.slice(0, 3))
+		var visible_orders: Array[Dictionary] = []
+		visible_orders.assign(active_orders)
+		visible_orders.sort_custom(_sort_orders_by_remaining_time)
+		cooking.refresh_orders(visible_orders.slice(0, 3))
 
 func _update_ui() -> void:
 	score_label.text = "Score: %d" % score
 	cooking.set_discard_counter(discarded_hamburgers, max_discarded_hamburgers)
 
 func _trigger_game_over() -> void:
+	if is_game_over:
+		return
+
 	is_game_over = true
 	countdown_label.visible = false
-	game_over_image.visible = true
+	game_over_image.visible = false
+	session_best_score = maxi(session_best_score, score)
+	_show_game_over_overlay()
+
+func _show_game_over_overlay() -> void:
+	if game_over_scene == null or game_over_overlay != null:
+		return
+
+	game_over_overlay = game_over_scene.instantiate() as Control
+	if game_over_overlay == null:
+		return
+
+	game_over_layer = CanvasLayer.new()
+	game_over_layer.layer = 100
+	add_child(game_over_layer)
+	game_over_layer.add_child(game_over_overlay)
+
+	if game_over_overlay.has_method("setup_scores"):
+		game_over_overlay.call("setup_scores", score, session_best_score)
+
+func _process_red_countdown(delta: float) -> void:
+	if not cooking.visible:
+		_cancel_red_countdown()
+		return
+
+	red_countdown_remaining = maxf(0.0, red_countdown_remaining - delta)
+	countdown_label.text = str(ceil(red_countdown_remaining))
+
+	if red_countdown_remaining <= 0.0:
+		countdown_label.visible = false
+		_set_red_light(true)
+
+		if customers.is_idle():
+			_on_all_customers_finished()
+
+func _process_order_timers(_delta: float) -> void:
+	if timed_orders.is_empty():
+		return
+
+	for index in range(timed_orders.size() - 1, -1, -1):
+		var order: Dictionary = timed_orders[index]
+		_update_order_remaining_time(order)
+		timed_orders[index] = order
+
+		if _get_order_remaining_seconds(order) <= 0.0:
+			_trigger_game_over()
+			_refresh_orders()
+			return
+
+	if not active_orders.is_empty():
+		_refresh_orders()
+
+func _roll_order_processing_seconds() -> float:
+	var score_factor := 0.0
+	if score_for_min_order_processing_seconds > 0:
+		score_factor = clamp(float(score) / float(score_for_min_order_processing_seconds), 0.0, 1.0)
+
+	var current_max_seconds: float = lerpf(max_order_processing_seconds, min_order_processing_seconds, score_factor)
+	var upper_bound: float = maxf(min_order_processing_seconds, current_max_seconds)
+	return rng.randf_range(min_order_processing_seconds, upper_bound)
+
+func _sort_orders_by_remaining_time(left: Dictionary, right: Dictionary) -> bool:
+	var left_remaining: float = _get_order_remaining_seconds(left)
+	var right_remaining: float = _get_order_remaining_seconds(right)
+	return left_remaining < right_remaining
+
+func _get_order_remaining_seconds(order: Dictionary) -> float:
+	return float(order.get("time_remaining_seconds", order.get("time_limit_seconds", 0.0)))
+
+func _update_order_remaining_time(order: Dictionary) -> void:
+	var time_limit_seconds: float = float(order.get("time_limit_seconds", 0.0))
+	var timer_started_seconds: float = float(order.get("timer_started_seconds", game_elapsed_seconds))
+	var elapsed_seconds: float = maxf(0.0, game_elapsed_seconds - timer_started_seconds)
+	order["time_remaining_seconds"] = maxf(0.0, time_limit_seconds - elapsed_seconds)
+
+func _is_order_timer_tracked(order_id: int) -> bool:
+	for order in timed_orders:
+		if int(order.get("id", -1)) == order_id:
+			return true
+
+	return false
+
+func _remove_tracked_order(order_id: int) -> void:
+	for index in range(timed_orders.size() - 1, -1, -1):
+		var order: Dictionary = timed_orders[index]
+		if int(order.get("id", -1)) == order_id:
+			timed_orders.remove_at(index)
+			return
 
 func _shuffle_array(values: Array[StringName]) -> void:
 	for index in range(values.size() - 1, 0, -1):

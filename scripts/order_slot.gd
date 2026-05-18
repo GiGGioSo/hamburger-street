@@ -1,20 +1,24 @@
 class_name OrderSlot
 extends Area2D
 
-@export var hover_scale := Vector2(1.15, 1.15)
-@export var icon_width := 36.0
-@export var ingredient_offset := Vector2(0, -8)
+@export var hover_scale := Vector2(1.45, 1.45)
+@export var icon_width := 44.0
+@export var stack_origin := Vector2(22, 46)
+@export var stack_offset := Vector2(0, -20)
 
 @onready var items_root: Node2D = $ItemsRoot as Node2D
+@onready var timer_label: Label = $TimerLabel as Label
 
 var game: Node = null
 var order: Dictionary = {}
 var original_scale := Vector2.ONE
+var original_z_index := 0
 var connected_drag_components: Array[DraggableComponent] = []
 
 func _ready() -> void:
 	input_pickable = false
 	original_scale = scale
+	original_z_index = z_index
 
 	if not mouse_entered.is_connected(_on_mouse_entered):
 		mouse_entered.connect(_on_mouse_entered)
@@ -43,6 +47,8 @@ func setup_order(order_data: Dictionary, game_ref: Node) -> void:
 	visible = not order.is_empty()
 	input_pickable = visible
 	scale = original_scale
+	z_index = original_z_index
+	_update_timer_label()
 	_render_order()
 
 func _render_order() -> void:
@@ -59,14 +65,53 @@ func _render_order() -> void:
 		if texture == null:
 			continue
 
-		var sprite := Sprite2D.new()
+		var cell_position: Vector2 = _get_cell_position(index)
+		var sprite: Sprite2D = Sprite2D.new()
 		sprite.texture = texture
-		sprite.position = ingredient_offset * index
+		sprite.position = cell_position
 		sprite.z_index = index
-		var texture_width: int = max(1.0, float(texture.get_width()))
+		var texture_width: float = maxf(1.0, float(texture.get_width()))
 		var scale_value: float = icon_width / texture_width
 		sprite.scale = Vector2(scale_value, scale_value)
 		items_root.add_child(sprite)
+
+func _get_cell_position(index: int) -> Vector2:
+	return stack_origin + (stack_offset * index)
+
+func _update_timer_label() -> void:
+	if timer_label == null:
+		return
+
+	timer_label.visible = not order.is_empty()
+	if order.is_empty():
+		timer_label.text = ""
+		return
+
+	var remaining_seconds: float = float(order.get("time_remaining_seconds", order.get("time_limit_seconds", 0.0)))
+	timer_label.text = _format_time(remaining_seconds)
+
+	if remaining_seconds <= 10.0:
+		timer_label.add_theme_color_override("font_color", Color(1.0, 0.25, 0.18))
+	else:
+		timer_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
+
+func _format_time(seconds: float) -> String:
+	var whole_seconds: int = maxi(0, int(ceil(seconds)))
+	var minutes: int = floori(float(whole_seconds) / 60.0)
+	var seconds_part: int = whole_seconds % 60
+	return "%d:%02d" % [minutes, seconds_part]
+
+func _report_red_light_attempt(source: Node) -> bool:
+	if game == null or not game.has_method("is_red_light_active"):
+		return false
+
+	if not bool(game.call("is_red_light_active")):
+		return false
+
+	if game.has_method("report_successful_interaction"):
+		game.call("report_successful_interaction", source)
+
+	return true
 
 func _connect_existing_drag_components() -> void:
 	for node in get_tree().get_nodes_in_group("draggable_component"):
@@ -102,13 +147,19 @@ func _on_drag_ended(item: Node2D, drag: DraggableComponent) -> void:
 		return
 
 	var burger: CompletedBurger = item as CompletedBurger
-	if burger == null or burger.has_burnt_patty:
+	if burger == null:
 		return
 
 	for area in drag.get_overlapping_areas():
 		var slot: OrderSlot = area as OrderSlot
 		if slot != self:
 			continue
+
+		if _report_red_light_attempt(item):
+			return
+
+		if burger.has_burnt_patty:
+			return
 
 		var points: int = _score_burger(burger)
 		if points <= 0:
@@ -152,9 +203,11 @@ func _on_mouse_entered() -> void:
 		return
 
 	scale = original_scale * hover_scale
+	z_index = original_z_index + 100
 
 func _on_mouse_exited() -> void:
 	scale = original_scale
+	z_index = original_z_index
 
 func _find_drag_component(node: Node) -> DraggableComponent:
 	var drag: DraggableComponent = node as DraggableComponent

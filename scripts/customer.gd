@@ -14,8 +14,8 @@ const SPECKLE_OPEN := preload("res://textures/speckle_open_mouth.png")
 @export var min_speaking_seconds := 2.0
 @export var max_speaking_seconds := 5.0
 @export var final_view_seconds := 1.0
-@export var ingredient_icon_width := 72.0
-@export var ingredient_offset := Vector2(0, -13)
+@export var ingredient_icon_width := 200.0
+@export var ingredient_offset := Vector2(0, -50)
 
 @onready var body_image: Sprite2D = $BodyImage as Sprite2D
 @onready var closed_mouth_image: Sprite2D = $ClosedMouthImage as Sprite2D
@@ -43,6 +43,11 @@ func setup(order_data: Dictionary, game_ref: Node) -> void:
 
 func _process(delta: float) -> void:
 	if order.is_empty():
+		return
+
+	if game and game.has_method("is_customer_progress_active") and not bool(game.call("is_customer_progress_active")):
+		open_mouth_image.visible = false
+		closed_mouth_image.visible = true
 		return
 
 	elapsed += delta

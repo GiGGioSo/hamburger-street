@@ -3,9 +3,9 @@ extends Node2D
 
 @export var order_slot_scene: PackedScene = preload("res://scenes/order_slot.tscn")
 @export var order_slot_positions: Array[Vector2] = [
-	Vector2(46, 130),
-	Vector2(46, 300),
-	Vector2(46, 470),
+	Vector2(46, 115),
+	Vector2(46, 315),
+	Vector2(46, 515),
 ]
 
 @onready var bin_slot: BinSlot = $BinSlot as BinSlot

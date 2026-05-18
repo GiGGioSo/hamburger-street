@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://rf1g64ddtd0j" path="res://scenes/main_start_menu.gd" id="1_ocx8q"]
 [ext_resource type="Texture2D" uid="uid://pascisuwthv1" path="res://textures/start/homepage.png" id="2_mu75n"]
 [ext_resource type="FontFile" uid="uid://ckida6khky0h5" path="res://textures/assets/PoorRichardOpti.otf" id="3_uao1n"]
-[ext_resource type="Texture2D" uid="uid://ydy2owuss4hy" path="res://textures/assets/button.png" id="4_iwmk4"]
+[ext_resource type="Texture2D" uid="uid://fjetcge22jj4" path="res://textures/start/start.png" id="4_iwmk4"]
 [ext_resource type="Script" uid="uid://ce3dxk1o8ax26" path="res://scenes/button.gd" id="5_mu75n"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bxxnx"]
@@ -61,13 +61,13 @@ theme_override_colors/font_pressed_color = Color(0.72156864, 0.62352943, 0.47058
 theme_override_colors/font_hover_color = Color(0.72156864, 0.62352943, 0.47058824, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.72156864, 0.62352943, 0.47058824, 1)
 theme_override_fonts/font = ExtResource("3_uao1n")
-theme_override_font_sizes/font_size = 90
+theme_override_font_sizes/font_size = 1
 theme_override_styles/normal = SubResource("StyleBoxTexture_dobq5")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_3rvxu")
 theme_override_styles/hover = SubResource("StyleBoxTexture_team7")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmn5n")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_66wb2")
-text = "START"
+text = ""
 script = ExtResource("5_mu75n")
 
 [connection signal="pressed" from="Button" to="." method="_on_start_pressed"]
