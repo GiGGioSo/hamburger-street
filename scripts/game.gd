@@ -24,6 +24,21 @@ const OPTIONAL_INGREDIENTS := [
 	&"senf",
 ]
 
+const BIN_SOUND_PATH := "res://music/bin.m4a"
+const COIN_VICTORY_SOUND_PATH := "res://music/coin_victory.m4a"
+const FULL_BLOW_VICTORY_SOUND_PATH := "res://music/full_blow_of_victory.m4a"
+const GAME_OVER_SOUND_PATH := "res://music/game_over.m4a"
+const KRANKENWAGEN_SOUND_PATH := "res://music/krankenwagen.m4a"
+const CUSTOMER_ALERT_SOUND_PATHS := [
+	"res://music/customers.m4a",
+	"res://music/sgatarrata.m4a",
+]
+const SNAP_SOUND_PATHS := [
+	"res://music/nice1.m4a",
+	"res://music/nice2.m4a",
+	"res://music/nice3.m4a",
+]
+
 static var session_best_score: int = 0
 
 @export var max_active_orders := 5
@@ -39,6 +54,7 @@ static var session_best_score: int = 0
 @onready var red_light: Node2D = $RedLight as Node2D
 @onready var green_light: Node2D = $"Green Light" as Node2D
 @onready var semaphore_area: Area2D = $SemaphoreArea as Area2D
+@onready var countdown_background: ColorRect = $CountdownBackground as ColorRect
 @onready var countdown_label: Label = $CountdownLabel as Label
 @onready var score_label: Label = $ScoreLabel as Label
 @onready var game_over_image: Sprite2D = $GameOverImage as Sprite2D
@@ -151,6 +167,7 @@ func complete_order(order_id: int, points: int) -> void:
 		completed_orders.append(order)
 		_remove_tracked_order(order_id)
 		score += points
+		play_delivery_sound()
 		_refresh_orders()
 		_update_ui()
 		return
@@ -183,15 +200,21 @@ func get_ingredient_texture(ingredient_id: StringName) -> Texture2D:
 	return INGREDIENT_TEXTURES.get(String(ingredient_id)) as Texture2D
 
 func _on_customer_spawned() -> void:
-	if is_game_over or is_red_light or red_countdown_remaining > 0.0:
+	if is_game_over or is_red_light:
 		return
 
 	if not cooking.visible:
 		_set_red_light(true)
 		return
 
+	play_customer_alert_sound()
+
+	if red_countdown_remaining > 0.0:
+		return
+
 	red_countdown_remaining = red_countdown_seconds
 	countdown_label.text = str(ceil(red_countdown_remaining))
+	countdown_background.visible = true
 	countdown_label.visible = true
 
 func _on_all_customers_finished() -> void:
@@ -207,7 +230,7 @@ func _on_semaphore_input_event(_viewport, event: InputEvent, _shape_idx: int) ->
 
 	if cooking.visible:
 		_show_customers()
-	elif customers.visible:
+	elif customers.visible and not is_red_light:
 		_show_cooking()
 
 func _show_cooking() -> void:
@@ -228,6 +251,7 @@ func _set_red_light(enabled: bool) -> void:
 
 func _cancel_red_countdown() -> void:
 	red_countdown_remaining = 0.0
+	countdown_background.visible = false
 	countdown_label.visible = false
 
 func _refresh_orders() -> void:
@@ -246,7 +270,9 @@ func _trigger_game_over() -> void:
 		return
 
 	is_game_over = true
+	play_game_over_sound()
 	countdown_label.visible = false
+	countdown_background.visible = false
 	game_over_image.visible = false
 	session_best_score = maxi(session_best_score, score)
 	_show_game_over_overlay()
@@ -276,6 +302,7 @@ func _process_red_countdown(delta: float) -> void:
 	countdown_label.text = str(ceil(red_countdown_remaining))
 
 	if red_countdown_remaining <= 0.0:
+		countdown_background.visible = false
 		countdown_label.visible = false
 		_set_red_light(true)
 
@@ -335,6 +362,46 @@ func _remove_tracked_order(order_id: int) -> void:
 		if int(order.get("id", -1)) == order_id:
 			timed_orders.remove_at(index)
 			return
+
+func play_bin_sound() -> void:
+	_play_sound(BIN_SOUND_PATH)
+
+func play_customer_alert_sound() -> void:
+	_play_random_sound(CUSTOMER_ALERT_SOUND_PATHS)
+
+func play_delivery_sound() -> void:
+	_play_sound(COIN_VICTORY_SOUND_PATH)
+	_play_sound(FULL_BLOW_VICTORY_SOUND_PATH)
+
+func play_game_over_sound() -> void:
+	_play_sound(GAME_OVER_SOUND_PATH)
+	_play_sound(KRANKENWAGEN_SOUND_PATH)
+
+func play_snap_sound() -> void:
+	_play_random_sound(SNAP_SOUND_PATHS)
+
+func _play_random_sound(paths: Array) -> void:
+	if paths.is_empty():
+		return
+
+	var path: String = String(paths[rng.randi_range(0, paths.size() - 1)])
+	_play_sound(path)
+
+func _play_sound(path: String) -> void:
+	var stream: AudioStream = load(path) as AudioStream
+	if stream == null:
+		push_warning("Missing or unsupported audio stream: %s" % path)
+		return
+
+	var player: AudioStreamPlayer = AudioStreamPlayer.new()
+	player.stream = stream
+	add_child(player)
+
+	var cleanup: Callable = Callable(player, "queue_free")
+	if not player.finished.is_connected(cleanup):
+		player.finished.connect(cleanup)
+
+	player.play()
 
 func _shuffle_array(values: Array[StringName]) -> void:
 	for index in range(values.size() - 1, 0, -1):

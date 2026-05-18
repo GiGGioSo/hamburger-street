@@ -73,8 +73,11 @@ func _on_drag_ended(item: Node2D, drag: DraggableComponent) -> void:
 		if bin != self:
 			continue
 
+		var game: Node = get_tree().get_first_node_in_group("game_controller")
+		if game and game.has_method("play_bin_sound"):
+			game.call("play_bin_sound")
+
 		if _counts_as_hamburger_discard(item):
-			var game: Node = get_tree().get_first_node_in_group("game_controller")
 			if game and game.has_method("report_hamburger_discarded"):
 				game.call("report_hamburger_discarded")
 

@@ -67,6 +67,7 @@ func snap(item: Node2D) -> bool:
 	_refresh_stack_drag_enabled()
 
 	item_snapped.emit(item, self)
+	_play_snap_sound()
 
 	if item.is_in_group(top_bun_group):
 		is_completed = true
@@ -228,6 +229,11 @@ func _on_item_drag_started(item: Node2D, _drag_component: DraggableComponent) ->
 
 func _on_confirm_button_pressed() -> void:
 	burger_confirmed.emit(self)
+
+func _play_snap_sound() -> void:
+	var game: Node = get_tree().get_first_node_in_group("game_controller")
+	if game and game.has_method("play_snap_sound"):
+		game.call("play_snap_sound")
 
 func _find_drag_component(node: Node) -> DraggableComponent:
 	var drag: DraggableComponent = node as DraggableComponent

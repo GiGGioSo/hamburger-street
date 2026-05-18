@@ -39,6 +39,7 @@ func snap(item: Node2D) -> void:
 	item.reparent(self)
 	item.position = snap_offset
 	item_snapped.emit(item, self)
+	_play_snap_sound()
 
 func restore_dragged_item(item: Node2D) -> bool:
 	if not can_accept(item):
@@ -69,3 +70,8 @@ func _release_current_item() -> void:
 func _on_current_item_drag_started(item: Node2D, _drag_component: DraggableComponent) -> void:
 	if item == current_item:
 		_release_current_item()
+
+func _play_snap_sound() -> void:
+	var game: Node = get_tree().get_first_node_in_group("game_controller")
+	if game and game.has_method("play_snap_sound"):
+		game.call("play_snap_sound")
