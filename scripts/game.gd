@@ -23,6 +23,8 @@ const OPTIONAL_INGREDIENTS := [
 	&"majo",
 	&"senf",
 ]
+const OPTIONAL_INGREDIENT_BASE_CHANCE := 0.55
+const OPTIONAL_INGREDIENT_DECAY := 0.55
 
 const BIN_SOUND: AudioStream = preload("res://music/bin.mp3")
 const COIN_VICTORY_SOUND: AudioStream = preload("res://music/coin_victory.mp3")
@@ -38,7 +40,7 @@ const NICE_2_SOUND: AudioStream = preload("res://music/nice2.mp3")
 const NICE_3_SOUND: AudioStream = preload("res://music/nice3.mp3")
 const BIN_SOUND_VOLUME_DB := 0.0
 const COIN_VICTORY_SOUND_VOLUME_DB := 6.0
-const FULL_BLOW_VICTORY_SOUND_VOLUME_DB := 6.0
+const FULL_BLOW_VICTORY_SOUND_VOLUME_DB := 10.0
 const GAME_OVER_SOUND_VOLUME_DB := 0.0
 const KRANKENWAGEN_SOUND_VOLUME_DB := 0.0
 const BACKGROUND_MUSIC_VOLUME_DB := -14.0
@@ -136,11 +138,21 @@ func _process(delta: float) -> void:
 
 func create_random_order(customer_type: String) -> Dictionary:
 	var middle: Array[StringName] = [&"patty"]
+	var optional_candidates: Array[StringName] = []
 
 	for ingredient_variant in OPTIONAL_INGREDIENTS:
 		var ingredient: StringName = ingredient_variant
-		if rng.randf() < 0.5:
+		optional_candidates.append(ingredient)
+
+	_shuffle_array(optional_candidates)
+
+	var selected_optional_count: int = 0
+	for ingredient_variant in optional_candidates:
+		var ingredient: StringName = ingredient_variant
+		var ingredient_chance: float = OPTIONAL_INGREDIENT_BASE_CHANCE * pow(OPTIONAL_INGREDIENT_DECAY, selected_optional_count)
+		if rng.randf() < ingredient_chance:
 			middle.append(ingredient)
+			selected_optional_count += 1
 
 	_shuffle_array(middle)
 
@@ -246,6 +258,7 @@ func _on_customer_spawned() -> void:
 
 func _on_all_customers_finished() -> void:
 	_cancel_red_countdown()
+	_refresh_orders()
 	_set_red_light(false)
 
 func _on_semaphore_input_event(_viewport, event: InputEvent, _shape_idx: int) -> void:

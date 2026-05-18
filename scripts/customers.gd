@@ -21,6 +21,7 @@ var active_customers: Array[Customer] = []
 var pending_wave_orders: Array[Dictionary] = []
 var queued_orders: Array[Dictionary] = []
 var slot_customers: Array[Customer] = []
+var registered_order_ids: Array[int] = []
 var rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
@@ -139,9 +140,10 @@ func _spawn_customer_in_slot(order: Dictionary, slot_index: int) -> void:
 	customer_spawned.emit()
 
 func _on_customer_order_ready(order: Dictionary) -> void:
-	game.call("add_order", order)
+	_register_order(order)
 
 func _on_customer_finished(customer: Customer) -> void:
+	_register_order(customer.order)
 	active_customers.erase(customer)
 
 	var slot_index: int = slot_customers.find(customer)
@@ -150,8 +152,19 @@ func _on_customer_finished(customer: Customer) -> void:
 
 	_try_spawn_queued_customers()
 
-	if is_idle():
+	if is_idle() and not bool(game.get("is_game_over")):
 		all_customers_finished.emit()
+
+func _register_order(order: Dictionary) -> void:
+	if order.is_empty():
+		return
+
+	var order_id: int = int(order.get("id", -1))
+	if registered_order_ids.has(order_id):
+		return
+
+	registered_order_ids.append(order_id)
+	game.call("add_order", order)
 
 func _active_request_count() -> int:
 	var orders: Array = game.get("active_orders") as Array
@@ -193,7 +206,7 @@ func _get_max_wave_size(score_value: int) -> int:
 
 func _get_min_wave_interval(score_value: int) -> float:
 	if score_value <= 3:
-		return 10.0
+		return 14.0
 	if score_value <= 8:
 		return 12.0
 	if score_value <= 15:
@@ -202,7 +215,7 @@ func _get_min_wave_interval(score_value: int) -> float:
 
 func _get_max_wave_interval(score_value: int) -> float:
 	if score_value <= 3:
-		return 16.0
+		return 18.0
 	if score_value <= 8:
 		return 18.0
 	if score_value <= 15:
