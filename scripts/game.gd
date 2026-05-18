@@ -36,15 +36,18 @@ const SGATARRATA_SOUND: AudioStream = preload("res://music/sgatarrata.mp3")
 const NICE_1_SOUND: AudioStream = preload("res://music/nice1.mp3")
 const NICE_2_SOUND: AudioStream = preload("res://music/nice2.mp3")
 const NICE_3_SOUND: AudioStream = preload("res://music/nice3.mp3")
-const CUSTOMER_ALERT_SOUNDS: Array[AudioStream] = [
-	CUSTOMERS_SOUND,
-	SGATARRATA_SOUND,
-]
-const SNAP_SOUNDS: Array[AudioStream] = [
-	NICE_1_SOUND,
-	NICE_2_SOUND,
-	NICE_3_SOUND,
-]
+const BIN_SOUND_VOLUME_DB := 0.0
+const COIN_VICTORY_SOUND_VOLUME_DB := 6.0
+const FULL_BLOW_VICTORY_SOUND_VOLUME_DB := 6.0
+const GAME_OVER_SOUND_VOLUME_DB := 0.0
+const KRANKENWAGEN_SOUND_VOLUME_DB := 0.0
+const BACKGROUND_MUSIC_VOLUME_DB := -14.0
+const SPIN_WIND_SOUND_VOLUME_DB := 0.0
+const CUSTOMERS_SOUND_VOLUME_DB := 0.0
+const SGATARRATA_SOUND_VOLUME_DB := 0.0
+const NICE_1_SOUND_VOLUME_DB := 2.0
+const NICE_2_SOUND_VOLUME_DB := 2.0
+const NICE_3_SOUND_VOLUME_DB := 2.0
 const PRELOADED_MUSIC: Array[AudioStream] = [
 	BIN_SOUND,
 	COIN_VICTORY_SOUND,
@@ -400,6 +403,7 @@ func _start_background_music() -> void:
 
 	background_music_player = AudioStreamPlayer.new()
 	background_music_player.stream = _make_looping_stream(BACKGROUND_MUSIC)
+	background_music_player.volume_db = BACKGROUND_MUSIC_VOLUME_DB
 	add_child(background_music_player)
 	background_music_player.play()
 
@@ -412,38 +416,42 @@ func _make_looping_stream(stream: AudioStream) -> AudioStream:
 	return looping_stream
 
 func play_bin_sound() -> void:
-	_play_sound(BIN_SOUND)
+	_play_sound(BIN_SOUND, BIN_SOUND_VOLUME_DB)
 
 func play_customer_alert_sound() -> void:
-	_play_random_sound(CUSTOMER_ALERT_SOUNDS)
+	var sound_index: int = rng.randi_range(0, 1)
+	if sound_index == 0:
+		_play_sound(CUSTOMERS_SOUND, CUSTOMERS_SOUND_VOLUME_DB)
+	else:
+		_play_sound(SGATARRATA_SOUND, SGATARRATA_SOUND_VOLUME_DB)
 
 func play_delivery_sound() -> void:
-	_play_sound(COIN_VICTORY_SOUND)
-	_play_sound(FULL_BLOW_VICTORY_SOUND)
+	_play_sound(COIN_VICTORY_SOUND, COIN_VICTORY_SOUND_VOLUME_DB)
+	_play_sound(FULL_BLOW_VICTORY_SOUND, FULL_BLOW_VICTORY_SOUND_VOLUME_DB)
 
 func play_game_over_sound() -> void:
-	_play_sound(GAME_OVER_SOUND)
-	_play_sound(KRANKENWAGEN_SOUND)
+	_play_sound(GAME_OVER_SOUND, GAME_OVER_SOUND_VOLUME_DB)
+	_play_sound(KRANKENWAGEN_SOUND, KRANKENWAGEN_SOUND_VOLUME_DB)
 
 func play_snap_sound() -> void:
-	_play_random_sound(SNAP_SOUNDS)
+	var sound_index: int = rng.randi_range(0, 2)
+	if sound_index == 0:
+		_play_sound(NICE_1_SOUND, NICE_1_SOUND_VOLUME_DB)
+	elif sound_index == 1:
+		_play_sound(NICE_2_SOUND, NICE_2_SOUND_VOLUME_DB)
+	else:
+		_play_sound(NICE_3_SOUND, NICE_3_SOUND_VOLUME_DB)
 
 func play_scene_switch_sound() -> void:
-	_play_sound(SPIN_WIND_SOUND)
+	_play_sound(SPIN_WIND_SOUND, SPIN_WIND_SOUND_VOLUME_DB)
 
-func _play_random_sound(streams: Array[AudioStream]) -> void:
-	if streams.is_empty():
-		return
-
-	var stream: AudioStream = streams[rng.randi_range(0, streams.size() - 1)]
-	_play_sound(stream)
-
-func _play_sound(stream: AudioStream) -> void:
+func _play_sound(stream: AudioStream, volume_db: float = 0.0) -> void:
 	if stream == null:
 		return
 
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.stream = stream
+	player.volume_db = volume_db
 	add_child(player)
 
 	var cleanup: Callable = Callable(player, "queue_free")
