@@ -24,19 +24,40 @@ const OPTIONAL_INGREDIENTS := [
 	&"senf",
 ]
 
-const BIN_SOUND_PATH := "res://music/bin.m4a"
-const COIN_VICTORY_SOUND_PATH := "res://music/coin_victory.m4a"
-const FULL_BLOW_VICTORY_SOUND_PATH := "res://music/full_blow_of_victory.m4a"
-const GAME_OVER_SOUND_PATH := "res://music/game_over.m4a"
-const KRANKENWAGEN_SOUND_PATH := "res://music/krankenwagen.m4a"
-const CUSTOMER_ALERT_SOUND_PATHS := [
-	"res://music/customers.m4a",
-	"res://music/sgatarrata.m4a",
+const BIN_SOUND: AudioStream = preload("res://music/bin.mp3")
+const COIN_VICTORY_SOUND: AudioStream = preload("res://music/coin_victory.mp3")
+const FULL_BLOW_VICTORY_SOUND: AudioStream = preload("res://music/full_blow_of_victory.mp3")
+const GAME_OVER_SOUND: AudioStream = preload("res://music/game_over.mp3")
+const KRANKENWAGEN_SOUND: AudioStream = preload("res://music/krankenwagen.mp3")
+const BACKGROUND_MUSIC: AudioStream = preload("res://music/final.mp3")
+const SPIN_WIND_SOUND: AudioStream = preload("res://music/spin_wind.mp3")
+const CUSTOMERS_SOUND: AudioStream = preload("res://music/customers.mp3")
+const SGATARRATA_SOUND: AudioStream = preload("res://music/sgatarrata.mp3")
+const NICE_1_SOUND: AudioStream = preload("res://music/nice1.mp3")
+const NICE_2_SOUND: AudioStream = preload("res://music/nice2.mp3")
+const NICE_3_SOUND: AudioStream = preload("res://music/nice3.mp3")
+const CUSTOMER_ALERT_SOUNDS: Array[AudioStream] = [
+	CUSTOMERS_SOUND,
+	SGATARRATA_SOUND,
 ]
-const SNAP_SOUND_PATHS := [
-	"res://music/nice1.m4a",
-	"res://music/nice2.m4a",
-	"res://music/nice3.m4a",
+const SNAP_SOUNDS: Array[AudioStream] = [
+	NICE_1_SOUND,
+	NICE_2_SOUND,
+	NICE_3_SOUND,
+]
+const PRELOADED_MUSIC: Array[AudioStream] = [
+	BIN_SOUND,
+	COIN_VICTORY_SOUND,
+	FULL_BLOW_VICTORY_SOUND,
+	GAME_OVER_SOUND,
+	KRANKENWAGEN_SOUND,
+	BACKGROUND_MUSIC,
+	SPIN_WIND_SOUND,
+	CUSTOMERS_SOUND,
+	SGATARRATA_SOUND,
+	NICE_1_SOUND,
+	NICE_2_SOUND,
+	NICE_3_SOUND,
 ]
 
 static var session_best_score: int = 0
@@ -72,10 +93,13 @@ var next_order_id := 1
 var rng := RandomNumberGenerator.new()
 var game_over_overlay: Control = null
 var game_over_layer: CanvasLayer = null
+var background_music_player: AudioStreamPlayer = null
 
 func _ready() -> void:
 	add_to_group("game_controller")
 	rng.randomize()
+	_prime_music_cache()
+	_start_background_music()
 
 	green_light.position = red_light.position
 	green_light.scale = red_light.scale
@@ -229,8 +253,10 @@ func _on_semaphore_input_event(_viewport, event: InputEvent, _shape_idx: int) ->
 		return
 
 	if cooking.visible:
+		play_scene_switch_sound()
 		_show_customers()
 	elif customers.visible and not is_red_light:
+		play_scene_switch_sound()
 		_show_cooking()
 
 func _show_cooking() -> void:
@@ -363,34 +389,57 @@ func _remove_tracked_order(order_id: int) -> void:
 			timed_orders.remove_at(index)
 			return
 
-func play_bin_sound() -> void:
-	_play_sound(BIN_SOUND_PATH)
+func _prime_music_cache() -> void:
+	var preloaded_music_count: int = PRELOADED_MUSIC.size()
+	if preloaded_music_count == 0:
+		push_warning("No music streams are preloaded.")
 
-func play_customer_alert_sound() -> void:
-	_play_random_sound(CUSTOMER_ALERT_SOUND_PATHS)
-
-func play_delivery_sound() -> void:
-	_play_sound(COIN_VICTORY_SOUND_PATH)
-	_play_sound(FULL_BLOW_VICTORY_SOUND_PATH)
-
-func play_game_over_sound() -> void:
-	_play_sound(GAME_OVER_SOUND_PATH)
-	_play_sound(KRANKENWAGEN_SOUND_PATH)
-
-func play_snap_sound() -> void:
-	_play_random_sound(SNAP_SOUND_PATHS)
-
-func _play_random_sound(paths: Array) -> void:
-	if paths.is_empty():
+func _start_background_music() -> void:
+	if BACKGROUND_MUSIC == null:
 		return
 
-	var path: String = String(paths[rng.randi_range(0, paths.size() - 1)])
-	_play_sound(path)
+	background_music_player = AudioStreamPlayer.new()
+	background_music_player.stream = _make_looping_stream(BACKGROUND_MUSIC)
+	add_child(background_music_player)
+	background_music_player.play()
 
-func _play_sound(path: String) -> void:
-	var stream: AudioStream = load(path) as AudioStream
+func _make_looping_stream(stream: AudioStream) -> AudioStream:
+	var looping_stream: AudioStream = stream.duplicate() as AudioStream
+	if looping_stream is AudioStreamMP3:
+		var mp3_stream: AudioStreamMP3 = looping_stream as AudioStreamMP3
+		mp3_stream.loop = true
+
+	return looping_stream
+
+func play_bin_sound() -> void:
+	_play_sound(BIN_SOUND)
+
+func play_customer_alert_sound() -> void:
+	_play_random_sound(CUSTOMER_ALERT_SOUNDS)
+
+func play_delivery_sound() -> void:
+	_play_sound(COIN_VICTORY_SOUND)
+	_play_sound(FULL_BLOW_VICTORY_SOUND)
+
+func play_game_over_sound() -> void:
+	_play_sound(GAME_OVER_SOUND)
+	_play_sound(KRANKENWAGEN_SOUND)
+
+func play_snap_sound() -> void:
+	_play_random_sound(SNAP_SOUNDS)
+
+func play_scene_switch_sound() -> void:
+	_play_sound(SPIN_WIND_SOUND)
+
+func _play_random_sound(streams: Array[AudioStream]) -> void:
+	if streams.is_empty():
+		return
+
+	var stream: AudioStream = streams[rng.randi_range(0, streams.size() - 1)]
+	_play_sound(stream)
+
+func _play_sound(stream: AudioStream) -> void:
 	if stream == null:
-		push_warning("Missing or unsupported audio stream: %s" % path)
 		return
 
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()

@@ -12,7 +12,7 @@ script = ExtResource("1_pce8h")
 
 [node name="BunBaseImage" type="Sprite2D" parent="."]
 z_index = 0
-scale = Vector2(0.055, 0.055)
+scale = Vector2(0.0475, 0.0475)
 texture = ExtResource("2_v7cnc")
 
 [node name="DraggableComponent" parent="." node_paths=PackedStringArray("target", "visual_target") instance=ExtResource("3_ku2rx")]

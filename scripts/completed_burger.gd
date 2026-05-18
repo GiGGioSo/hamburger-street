@@ -23,7 +23,8 @@ func setup_burger(sequence: Array[StringName], stack_items: Array[Node2D], conta
 			continue
 
 		_disable_nested_drag(item)
-		item.reparent(self)
+		item.reparent(self, false)
+		item.rotation = 0.0
 		item.position = item_base_offset + (stack_offset * (index + 1))
 		item.z_index = index + 1
 

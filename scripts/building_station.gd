@@ -110,7 +110,11 @@ func _on_slot_burger_confirmed(slot: BuildingSlotComponent) -> void:
 	var built_items: Array[Node2D] = slot.consume_items_for_completed_burger()
 
 	var completed_burger: CompletedBurger = completed_burger_scene.instantiate() as CompletedBurger
-	get_tree().current_scene.add_child(completed_burger)
+	var burger_parent: Node = get_parent()
+	if burger_parent == null:
+		burger_parent = get_tree().current_scene
+
+	burger_parent.add_child(completed_burger)
 	completed_burger.global_position = slot.global_position
 	completed_burger.setup_burger(ingredient_sequence, built_items, has_burnt_patty)
 
